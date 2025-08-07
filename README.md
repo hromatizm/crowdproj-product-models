@@ -1,7 +1,21 @@
 # Product models (crowdproj opensource)
-A microservice for description, management and provisioning of the specific model of a product with its own values of properties.
+Микросервис, предоставляющий функционал для работы с моделями продуктов:
+- создание
+- хранение
+- редактирование
+- поиск
 
-Микросервис для описания модели товара, в которой перечислены свойства товара и их значения.
+Модель продукта - представление о потребительских свойствах продукта, 
+описываемое набором родовых (не индивидуальных) характеристик. 
+Модели продуктов определяются в рамках продуктовых групп. 
+Например, в рамках группы "Холодильники" определяются конкретные модели холодильников.
+
+Каждая модель описывается конкретными значениями для набора параметров определенных для соответсвующей продуктовой группы, таких как:
+- цвет
+- вес
+- габариты
+- потребляемая мощность (для электроприборов)
+- и др.
 
 ## Документация
 
@@ -11,12 +25,12 @@ A microservice for description, management and provisioning of the specific mode
     3. [Конкурентный анализ](./docs/01-marketing/03-concurrency.md)
     4. [Анализ экономики](./docs/01-marketing/04-economy.md)
     5. [Пользовательские истории](./docs/01-marketing/05-user-stories.md)
-    6. [Визуальная схема фронтенда](./docs/01-marketing/06-ui-example.md)
+    6. [MVP](./docs/01-marketing/06-mvp.md)
+    7. [Визуальная схема фронтенда](docs/01-marketing/07-ui-example.md)
 2. DevOps
     1. [Инфраструктура развертывания](./docs/02-devops/01-infrastructure.md)
     2. [Инфраструктура мониторинга](./docs/02-devops/02-monitoring.md)
 3. Тесты
 4. Архитектура
-    1. [Компонентная схема](./docs/04-architecture/01-arch.md)
-    2. [Интеграционная схема](./docs/04-architecture/02-integration.md)
-    3. [Описание API](./docs/04-architecture/03-api.md)
+   1. [Описание сущностей и API](docs/04-architecture/03-api.md)
+   2. [Компонентная схема](./docs/04-architecture/imgs/arch-C4-components.drawio.svg)
