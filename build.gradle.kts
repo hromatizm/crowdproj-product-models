@@ -1,9 +1,8 @@
 plugins {
-    kotlin("jvm") apply false
-    kotlin("multiplatform") apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
-group = "com.crowdproj.product.model"
+group = "com.product.model"
 version = "0.0.1"
 
 repositories {
