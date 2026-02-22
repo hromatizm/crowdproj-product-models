@@ -1,0 +1,389 @@
+openapi: 3.0.3
+info:
+    title: "Product models ${VERSION_APP}"
+    description: Сервис для описания модели товара, в которой перечислены свойства товара и их значения.
+    version: 1.0.0
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/v1
+tags:
+  - name: product-model
+    description: Модели товаров
+
+paths:
+  /pm/create:
+    post:
+      tags:
+        - product-model
+      summary: Создание модели товара
+      operationId: pmCreate
+      requestBody:
+        description: Тело запроса
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Успешное создание модели товара
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmCreateResponse'
+
+  /pm/read:
+    post:
+      tags:
+        - product-model
+      summary: Получение модели товара
+      operationId: PmReadById
+      requestBody:
+        description: Тело запроса
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmReadResponse'
+
+  /pm/update:
+    post:
+      tags:
+        - product-model
+      summary: Обновление модели продукта
+      operationId: PmUpdate
+      requestBody:
+        description: Тело запроса
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmUpdateResponse'
+
+  /pm/delete:
+    post:
+      tags:
+        - product-model
+      summary: Удаление модели продукта
+      operationId: PmDelete
+      requestBody:
+        description: Тело запроса
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmDeleteResponse'
+
+  /pm/search:
+    post:
+      tags:
+        - product-model
+      summary: Поиск модели продукта
+      operationId: PmSearch
+      requestBody:
+        description: Тело запроса
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmSearchResponse'
+
+components:
+  schemas:
+
+    # PRODUCT MODEL
+    BasePm:
+      type: object
+      description: объект описывает свойства модели товара, одинаковые для create и update
+      properties:
+        name:
+          type: string
+          description: Наименование модели товара
+        description:
+          type: string
+          description: Описание модели товара
+        productGroupId:
+          type: string
+          description: Идентификатор продуктовой группы, которой относится модель товара # from "Product group" microservice
+
+    PmId:
+      type: string
+      description: Идентификатор модели товара
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+
+    PmLock:
+      type: string
+      description: Версия оптимистичной блокировки
+
+    # REQUEST
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дискриминатор для определения типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/PmCreateRequest'
+          read: '#/components/schemas/PmReadRequest'
+          update: '#/components/schemas/PmUpdateRequest'
+          delete: '#/components/schemas/PmDeleteRequest'
+          search: '#/components/schemas/PmSearchRequest'
+
+    #  Create
+    PmCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/PmRequestDebug'
+        - type: object
+          properties:
+            pm:
+              $ref: '#/components/schemas/PmCreateObject'
+
+    PmCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BasePm'
+
+    # Read
+    PmReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/PmRequestDebug'
+        - type: object
+          properties:
+            pmId:
+              $ref: '#/components/schemas/PmId'
+
+    # Update
+    PmUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/PmRequestDebug'
+        - type: object
+          properties:
+            pm:
+              $ref: '#/components/schemas/PmUpdateObject'
+
+    PmUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BasePm'
+        - type: object
+          properties:
+            pmId:
+              $ref: '#/components/schemas/PmId'
+            pmLock:
+              $ref: '#/components/schemas/PmLock'
+
+    # Delete
+    PmDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/PmRequestDebug'
+        - type: object
+          properties:
+            pmId:
+              $ref: '#/components/schemas/PmId'
+            pmLock:
+              $ref: '#/components/schemas/PmLock'
+
+    # Search
+    PmSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/PmRequestDebug'
+        - type: object
+          properties:
+            pmFilter:
+              $ref: '#/components/schemas/PmSearchFilter'
+
+    PmSearchFilter:
+      type: object
+      description: Фильтры для поиска моделей продуктов
+      properties:
+        name:
+          type: string
+          description: Фильтр по наименованию
+        description:
+          type: string
+          description: Фильтр по описанию
+
+    # RESPONSE
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дискриминатор для определения типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/PmCreateResponse'
+          read: '#/components/schemas/PmReadResponse'
+          update: '#/components/schemas/PmUpdateResponse'
+          delete: '#/components/schemas/PmDeleteResponse'
+          search: '#/components/schemas/PmSearchResponse'
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    PmResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BasePm'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/PmId'
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/PmLock'
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/PmPermissions'
+
+    PmPermissions:
+      type: string
+      description: Доступы для клиента для операций над моделью продукта
+      enum:
+        - read
+        - update
+        - delete
+
+    PmResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом объявления
+          properties:
+            pm:
+              $ref: '#/components/schemas/PmResponseObject'
+
+    PmResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            pms:
+              type: array
+              items:
+                $ref: '#/components/schemas/PmResponseObject'
+
+    PmCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/PmResponseSingle'
+
+    PmReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/PmResponseSingle'
+
+    PmUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/PmResponseSingle'
+
+    PmDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/PmResponseSingle'
+
+    PmSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/PmResponseMulti'
+
+    # DEBUG
+    PmRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/PmDebug'
+
+    PmDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/PmRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/PmRequestDebugStubs'
+
+    PmRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    PmRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - cannotDelete
+        - badSearchString

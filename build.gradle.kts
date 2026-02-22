@@ -18,8 +18,23 @@ subprojects {
     }
 }
 
+ext {
+    val specDir = layout.projectDirectory.dir("./specs")
+    set("spec-v1", specDir.file("spec-v1.yaml").toString())
+}
+
 tasks {
-    val deploy: Task by creating {
-        dependsOn("build")
+    register("build" ) {
+        group = "build"
+    }
+    register("check" ) {
+        group = "verification"
+        // Таска верхнего уровня запустит таски check всех подпроектов
+        subprojects.forEach { proj ->
+            println("PROJ $proj")
+            proj.getTasksByName("check", false).also {
+                this@register.dependsOn(it)
+            }
+        }
     }
 }
