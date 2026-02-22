@@ -140,7 +140,7 @@ components:
       type: string
       description: Идентификатор модели товара
 
-    UserId:
+    PmUserId:
       type: string
       description: Идентификатор пользователя
 
@@ -187,7 +187,14 @@ components:
         - $ref: '#/components/schemas/PmRequestDebug'
         - type: object
           properties:
-            pmId:
+            pm:
+              $ref: '#/components/schemas/PmReadObject'
+
+    PmReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
               $ref: '#/components/schemas/PmId'
 
     # Update
@@ -217,9 +224,16 @@ components:
         - $ref: '#/components/schemas/PmRequestDebug'
         - type: object
           properties:
-            pmId:
+            pm:
+              $ref: '#/components/schemas/PmDeleteObject'
+
+    PmDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
               $ref: '#/components/schemas/PmId'
-            pmLock:
+            lock:
               $ref: '#/components/schemas/PmLock'
 
     # Search
@@ -294,7 +308,7 @@ components:
             id:
               $ref: '#/components/schemas/PmId'
             ownerId:
-              $ref: '#/components/schemas/UserId'
+              $ref: '#/components/schemas/PmUserId'
             lock:
               $ref: '#/components/schemas/PmLock'
             permissions:
