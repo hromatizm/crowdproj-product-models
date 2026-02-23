@@ -271,7 +271,7 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/PmError'
       discriminator:
         propertyName: responseType
         mapping:
@@ -287,7 +287,7 @@ components:
         - success
         - error
 
-    Error:
+    PmError:
       type: object
       properties:
         code:
@@ -315,9 +315,9 @@ components:
               type: array
               uniqueItems: true
               items:
-                $ref: '#/components/schemas/PmPermissions'
+                $ref: '#/components/schemas/PmPermission'
 
-    PmPermissions:
+    PmPermission:
       type: string
       description: Доступы для клиента для операций над моделью продукта
       enum:

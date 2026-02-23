@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":api-v1"))
     testImplementation(kotlin("test"))
+    testImplementation(libs.assertj)
 }
 
 kotlin {

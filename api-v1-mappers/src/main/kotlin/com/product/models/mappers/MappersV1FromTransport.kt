@@ -1,4 +1,4 @@
-package com.product.models
+package com.product.models.mappers
 
 import com.product.model.InnerPmContext
 import com.product.model.api.v1.models.*

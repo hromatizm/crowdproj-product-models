@@ -4,7 +4,7 @@ import apiV1Mapper
 import apiV1ResponseDeserialize
 import apiV1ResponseSerialize
 import com.product.model.api.v1.models.PmCreateResponse
-import com.product.model.api.v1.models.PmPermissions
+import com.product.model.api.v1.models.PmPermission
 import com.product.model.api.v1.models.PmResponseObject
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.Test
@@ -19,7 +19,7 @@ private const val LOCK = "test lock"
 
 class V1ResponseSerializationTest {
 
-    private val permissions = setOf(PmPermissions.READ, PmPermissions.UPDATE, PmPermissions.DELETE)
+    private val permissions = setOf(PmPermission.READ, PmPermission.UPDATE, PmPermission.DELETE)
 
     private val response = PmCreateResponse(
         responseType = CREATE,
