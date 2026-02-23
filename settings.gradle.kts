@@ -1,10 +1,5 @@
 rootProject.name = "product-models"
 
-pluginManagement {
-    plugins {
-        val kotlinVersion: String by settings
-
-        kotlin("jvm") version kotlinVersion
-        kotlin("plugin.serialization") version kotlinVersion apply false
-    }
-}
+include("api-v1")
+include("common")
+include("api-v1-mappers")

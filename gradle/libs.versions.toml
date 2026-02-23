@@ -1,7 +1,7 @@
 [versions]
-kotlin = "2.1.0"
+kotlin = "2.1.20"
 
-kotlinx-datetime = "0.6.2"
+kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.6.3"
 coroutines = "1.9.0"
 
@@ -88,7 +88,7 @@ kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kote
 kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.1" }
-
+assertj = { module = "org.assertj:assertj-core", version = "3.27.7" }
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq", version.ref = "testcontainers" }
 
