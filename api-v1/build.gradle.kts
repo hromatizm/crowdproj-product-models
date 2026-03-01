@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlinx.serialization) // чтобы сгенерился код с сериализаторами
     alias(libs.plugins.openapi.generator)
 }
 
@@ -8,6 +9,11 @@ sourceSets {
     main {
         java.srcDir(layout.buildDirectory.dir("generate-resources/main/src/main/kotlin"))
     }
+}
+
+dependencies {
+    testImplementation(libs.kotest.junit5)
+    testImplementation(libs.kotest.core)
 }
 
 /**
@@ -39,7 +45,7 @@ openApiGenerate {
         mapOf(
             "dateLibrary" to "string",
             "enumPropertyNaming" to "UPPERCASE",
-            "serializationLibrary" to "jackson",
+            "serializationLibrary" to "kotlinx_serialization",
             "collectionType" to "list"
         )
     )
@@ -47,8 +53,8 @@ openApiGenerate {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(libs.jackson.kotlin)
-    implementation(libs.jackson.datatype)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(kotlin("test"))
     testImplementation(libs.assertj)}
 
