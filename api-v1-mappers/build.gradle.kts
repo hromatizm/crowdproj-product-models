@@ -6,8 +6,8 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":common"))
     implementation(project(":api-v1"))
-    testImplementation(kotlin("test"))
-    testImplementation(libs.assertj)
+    testImplementation(libs.kotest.junit5)
+    testImplementation(libs.kotest.core)
 }
 
 kotlin {

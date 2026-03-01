@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(kotlin("test"))
-    testImplementation(libs.assertj)}
+}
 
 repositories {
     mavenCentral()
