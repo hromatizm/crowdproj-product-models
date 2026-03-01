@@ -1,13 +1,15 @@
-package com.product.model.api.v1
-
-import apiV1Mapper
-import apiV1ResponseDeserialize
-import apiV1ResponseSerialize
 import com.product.model.api.v1.models.PmCreateResponse
 import com.product.model.api.v1.models.PmPermission
 import com.product.model.api.v1.models.PmResponseObject
-import org.assertj.core.api.Assertions.assertThat
-import kotlin.test.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import ru.otus.otuskotlin.marketplace.api.v2.apiV1ResponseDeserialize
+import ru.otus.otuskotlin.marketplace.api.v2.apiV1ResponseSerialize
 
 private const val PM_NAME = "test pm name"
 private const val PM_DESCRIPTION = "test pm description"
@@ -17,12 +19,11 @@ private const val PM_ID = "test id"
 private const val PM_OWNER_ID = "test owner id"
 private const val LOCK = "test lock"
 
-class V1ResponseSerializationTest {
+class V1ResponseSerializationTest : FunSpec({
 
-    private val permissions = setOf(PmPermission.READ, PmPermission.UPDATE, PmPermission.DELETE)
+    val permissions = setOf(PmPermission.READ, PmPermission.UPDATE, PmPermission.DELETE)
 
-    private val response = PmCreateResponse(
-        responseType = CREATE,
+    val response = PmCreateResponse(
         pm = PmResponseObject(
             id = PM_ID,
             name = PM_NAME,
@@ -34,28 +35,32 @@ class V1ResponseSerializationTest {
         ),
     )
 
-    @Test
-    fun `serialize successfully`() {
+    test("serialize successfully") {
+        // Act
         val jsonString = apiV1ResponseSerialize(response)
 
-        val jsonNode = apiV1Mapper.readTree(jsonString)
+        // Assert
+        val jsonObject = Json.parseToJsonElement(jsonString).jsonObject
+        val pmObject = jsonObject["pm"]!!.jsonObject
 
-        assertThat(jsonNode.get("responseType").asText()).isEqualTo(CREATE)
-        assertThat(jsonNode.get("pm").get("description").asText()).isEqualTo(PM_DESCRIPTION)
-        assertThat(jsonNode.get("pm").get("id").asText()).isEqualTo(PM_ID)
-        assertThat(jsonNode.get("pm").get("lock").asText()).isEqualTo(LOCK)
-        assertThat(jsonNode.get("pm").get("name").asText()).isEqualTo(PM_NAME)
-        assertThat(jsonNode.get("pm").get("ownerId").asText()).isEqualTo(PM_OWNER_ID)
-        assertThat(jsonNode.get("pm").get("permissions").asIterable().map { it.asText() })
-            .containsExactlyElementsOf(permissions.map { it.value })
-        assertThat(jsonNode.get("pm").get("productGroupId").asText()).isEqualTo(PRODUCT_GROUP_ID)
+        jsonObject["responseType"]?.jsonPrimitive?.content shouldBe CREATE
+        pmObject["description"]?.jsonPrimitive?.content shouldBe PM_DESCRIPTION
+        pmObject["id"]?.jsonPrimitive?.content shouldBe PM_ID
+        pmObject["lock"]?.jsonPrimitive?.content shouldBe LOCK
+        pmObject["name"]?.jsonPrimitive?.content shouldBe PM_NAME
+        pmObject["ownerId"]?.jsonPrimitive?.content shouldBe PM_OWNER_ID
+        pmObject["productGroupId"]?.jsonPrimitive?.content shouldBe PRODUCT_GROUP_ID
+        pmObject["permissions"]?.jsonArray
+            ?.map { it.jsonPrimitive.content }
+            ?.shouldContainExactlyInAnyOrder(permissions.map { it.value })
     }
 
-    @Test
-    fun `deserialize successfully`() {
+    test("deserialize successfully") {
+        // Act
         val jsonString = apiV1ResponseSerialize(response)
-        val obj = apiV1ResponseDeserialize(jsonString) as PmCreateResponse
+        val obj = apiV1ResponseDeserialize<PmCreateResponse>(jsonString)
 
-        assertThat(obj).isEqualTo(response)
+        // Assert
+        obj shouldBe response
     }
-}
+})

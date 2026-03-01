@@ -1,37 +1,34 @@
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.MapperFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.KotlinFeature
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+@file:Suppress("unused")
+
+package ru.otus.otuskotlin.marketplace.api.v2
+
 import com.product.model.api.v1.models.IRequest
 import com.product.model.api.v1.models.IResponse
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 
-val apiV1Mapper: ObjectMapper = JsonMapper.builder().run {
-    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    enable(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL) // если не определен подтип, то используется базовый тип
-    serializationInclusion(JsonInclude.Include.NON_NULL)
-    addModule(
-        KotlinModule.Builder()
-            .withReflectionCacheSize(512)
-            .configure(KotlinFeature.NullToEmptyCollection, false)
-            .configure(KotlinFeature.NullIsSameAsDefault, false)
-            .configure(KotlinFeature.SingletonSupport, true) // для object и sealed classes
-            .configure(KotlinFeature.StrictNullChecks, false)
-            .build()
-    )
-    build()
+@OptIn(ExperimentalSerializationApi::class)
+val apiV1Mapper = Json {
+    ignoreUnknownKeys = true
+    allowTrailingComma = true
 }
 
-fun apiV1RequestSerialize(request: IRequest): String =
-    apiV1Mapper.writeValueAsString(request)
+@Suppress("UNCHECKED_CAST")
+fun <T : IRequest> apiV1RequestDeserialize(json: String) =
+    apiV1Mapper.decodeFromString<IRequest>(json) as T
 
-fun <T : IRequest> apiV1RequestDeserialize(json: String): T =
-    apiV1Mapper.readValue(json, IRequest::class.java) as T
+fun apiV1ResponseSerialize(obj: IResponse): String =
+    apiV1Mapper.encodeToString(IResponse.serializer(), obj)
 
-fun apiV1ResponseSerialize(response: IResponse): String =
-    apiV1Mapper.writeValueAsString(response)
+@Suppress("UNCHECKED_CAST")
+fun <T : IResponse> apiV1ResponseDeserialize(json: String) =
+    apiV1Mapper.decodeFromString<IResponse>(json) as T
 
-fun <T : IResponse> apiV1ResponseDeserialize(json: String): T =
-    apiV1Mapper.readValue(json, IResponse::class.java) as T
+inline fun <reified T : IResponse> apiV1ResponseSimpleDeserialize(json: String) =
+    apiV1Mapper.decodeFromString<T>(json)
+
+fun apiV1RequestSerialize(obj: IRequest): String =
+    apiV1Mapper.encodeToString(IRequest.serializer(), obj)
+
+inline fun <reified T : IRequest> apiV1RequestSimpleSerialize(obj: T): String =
+    apiV1Mapper.encodeToString<T>(obj)
