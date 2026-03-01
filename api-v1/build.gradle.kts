@@ -16,7 +16,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotest.junit5)
-    testImplementation(libs.kotest.core)
 }
 
 /**
