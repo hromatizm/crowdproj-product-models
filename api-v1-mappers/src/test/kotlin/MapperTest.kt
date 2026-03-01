@@ -3,10 +3,14 @@ import com.product.model.api.v1.models.*
 import com.product.model.inner.*
 import com.product.models.mappers.fromTransport
 import com.product.models.mappers.toTransportPm
-import org.assertj.core.api.Assertions.assertThat
-import kotlin.test.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+
 
 private const val TEST_PM_NAME = "test pm name"
 private const val TEST_PM_DESCRIPTION = "test pm description"
@@ -21,10 +25,9 @@ private const val TEST_ERROR_FIELD = "test error field"
 private const val TEST_ERROR_MESSAGE = "test error message"
 
 @OptIn(ExperimentalTime::class)
-class MapperTest {
+class MapperTest : FunSpec({
 
-    @Test
-    fun fromTransport() {
+    test("fromTransport") {
         val req = PmCreateRequest(
             debug = PmDebug(
                 mode = PmRequestDebugMode.STUB,
@@ -49,22 +52,21 @@ class MapperTest {
         val ctx = InnerPmContext()
         ctx.fromTransport(req)
 
-        assertThat(ctx.command).isEqualTo(InnerPmCommand.CREATE)
-        assertThat(ctx.state).isEqualTo(InnerPmState.NONE)
-        assertThat(ctx.errors).isEmpty()
-        assertThat(ctx.workMode).isEqualTo(InnerPmWorkMode.STUB)
-        assertThat(ctx.stubCase).isEqualTo(InnerPmStubs.SUCCESS)
-        assertThat(ctx.requestId).isEqualTo(InnerPmRequestId.NONE)
-        assertThat(ctx.timeStart).isNotNull()
-        assertThat(ctx.pmRequest).isEqualTo(expectedInnerPm)
-        assertThat(ctx.pmFilterRequest.name).isEqualTo("")
-        assertThat(ctx.pmFilterRequest.description).isEqualTo("")
-        assertThat(ctx.pmResponse.isEmpty()).isTrue()
-        assertThat(ctx.pmsResponse).isEmpty()
+        ctx.command shouldBe InnerPmCommand.CREATE
+        ctx.state shouldBe InnerPmState.NONE
+        ctx.errors.shouldBeEmpty()
+        ctx.workMode shouldBe InnerPmWorkMode.STUB
+        ctx.stubCase shouldBe InnerPmStubs.SUCCESS
+        ctx.requestId shouldBe InnerPmRequestId.NONE
+        ctx.timeStart shouldNotBe null
+        ctx.pmRequest shouldBe expectedInnerPm
+        ctx.pmFilterRequest.name shouldBe ""
+        ctx.pmFilterRequest.description shouldBe ""
+        ctx.pmResponse.isEmpty() shouldBe true
+        ctx.pmsResponse.shouldBeEmpty()
     }
 
-    @Test
-    fun toTransport() {
+    test("toTransport") {
         val now = Clock.System.now()
         val ctx = InnerPmContext(
             command = InnerPmCommand.CREATE,
@@ -106,8 +108,8 @@ class MapperTest {
 
         val response = ctx.toTransportPm() as PmCreateResponse
 
-        assertThat(response.result).isEqualTo(ResponseResult.SUCCESS)
-        assertThat(response.errors).containsExactly(
+        response.result shouldBe ResponseResult.SUCCESS
+        response.errors shouldContainExactly listOf(
             PmError(
                 code = TEST_ERROR_CODE,
                 group = TEST_ERROR_GROUP,
@@ -115,12 +117,12 @@ class MapperTest {
                 message = TEST_ERROR_MESSAGE,
             )
         )
-        assertThat(response.pm?.id).isEqualTo(TEST_PM_ID)
-        assertThat(response.pm?.name).isEqualTo(TEST_PM_NAME)
-        assertThat(response.pm?.description).isEqualTo(TEST_PM_DESCRIPTION)
-        assertThat(response.pm?.productGroupId).isEqualTo(TEST_PRODUCT_GROUP_ID)
-        assertThat(response.pm?.ownerId).isEqualTo(TEST_PM_OWNER_ID)
-        assertThat(response.pm?.lock).isEqualTo(TEST_PM_LOCK)
-        assertThat(response.pm?.permissions).containsExactly(PmPermission.READ, PmPermission.DELETE)
+        response.pm?.id shouldBe TEST_PM_ID
+        response.pm?.name shouldBe TEST_PM_NAME
+        response.pm?.description shouldBe TEST_PM_DESCRIPTION
+        response.pm?.productGroupId shouldBe TEST_PRODUCT_GROUP_ID
+        response.pm?.ownerId shouldBe TEST_PM_OWNER_ID
+        response.pm?.lock shouldBe TEST_PM_LOCK
+        response.pm?.permissions shouldContainExactly listOf(PmPermission.READ, PmPermission.DELETE)
     }
-}
+})
