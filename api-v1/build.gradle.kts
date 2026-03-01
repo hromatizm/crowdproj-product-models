@@ -12,6 +12,9 @@ sourceSets {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.kotest.core)
 }
@@ -49,13 +52,6 @@ openApiGenerate {
             "collectionType" to "list"
         )
     )
-}
-
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    testImplementation(kotlin("test"))
 }
 
 repositories {
