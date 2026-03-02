@@ -1,4 +1,5 @@
 import com.product.model.InnerPmContext
+import com.product.model.LogLevel
 import com.product.model.api.v1.models.*
 import com.product.model.inner.*
 import com.product.models.mappers.fromTransport
@@ -78,7 +79,7 @@ class MapperTest : FunSpec({
                     field = TEST_ERROR_FIELD,
                     message = TEST_ERROR_MESSAGE,
                     exception = Exception("test exception"),
-                    level = InnerPmError.LogLevel.ERROR,
+                    level = LogLevel.ERROR,
                 )
             ),
             workMode = InnerPmWorkMode.PROD,

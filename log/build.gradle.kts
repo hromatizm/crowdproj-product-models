@@ -21,7 +21,7 @@ openApiGenerate {
     apiPackage.set("$openapiGroup.api")
     modelPackage.set("$openapiGroup.models")
     invokerPackage.set("$openapiGroup.invoker")
-    inputSpec.set(rootProject.ext["spec-v1"] as String) // путь к файлу spec, берется из раздела ext корневого build.gradle.kts
+    inputSpec.set(rootProject.ext["spec-log"] as String) // путь к файлу spec, берется из раздела ext корневого build.gradle.kts
 
     /**
      * Здесь указываем, что нам нужны только модели, все остальное не нужно

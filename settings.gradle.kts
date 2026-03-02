@@ -11,3 +11,5 @@ dependencyResolutionManagement {
 include("api-v1")
 include("common")
 include("api-v1-mappers")
+include("ktor")
+include("log")

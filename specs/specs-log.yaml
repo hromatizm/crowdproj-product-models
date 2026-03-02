@@ -1,0 +1,106 @@
+openapi: 3.0.4
+info:
+  title: Логирование продуктовых моделей
+  description: Модели логирования сервиса моделей продуктов
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+paths: {}
+
+components:
+  schemas:
+    CommonLogModel:
+      title: Общая модель лога
+      type: object
+      properties:
+        messageTime:
+          type: string
+        logId:
+          type: string
+        source:
+          type: string
+        pm:
+          $ref: '#/components/schemas/PmLogModel'
+#        comments:
+#          $ref: '#/components/schemas/PmLogModel'
+#        files:
+#          $ref: '#/components/schemas/PmLogModel'
+#        images:
+#          $ref: '#/components/schemas/PmLogModel'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorLogModel'
+
+    PmLogModel:
+      title: Модель лога для микросервиса Marketplace
+      type: object
+      properties:
+        requestId:
+          type: string
+        operation:
+          $ref: '#/components/schemas/PmLogOperation'
+        requestPm:
+          $ref: '#/components/schemas/PmLog'
+        requestFilter:
+          $ref: '#/components/schemas/PmFilterLog'
+        responsePm:
+          $ref: '#/components/schemas/PmLog'
+        responsePms:
+          type: array
+          items:
+            $ref: '#/components/schemas/PmLog'
+
+    PmLogOperation:
+      type: string
+      enum:
+        - create
+        - read
+        - update
+        - delete
+        - search
+        - offers
+        - init
+        - finish
+
+    ErrorLogModel:
+      title: Модель лога для ошибки
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        code:
+          type: string
+        level:
+          type: string
+
+    PmLog:
+      title: Модель лога для продуктовой модели
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        productGroupId:
+          type: string
+        ownerId:
+          type: string
+        permissions:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+
+    PmFilterLog:
+      title: Модель лога фильтра
+      properties:
+        name:
+          type: string
+        description:
+          type: string
