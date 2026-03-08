@@ -33,6 +33,7 @@ dependencies {
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.ktor.client.negotiation)
     testImplementation(kotlin("test"))
 }
 
