@@ -1,5 +1,6 @@
 package com.product.model
 
+import com.product.model.piugins.initAppSettings
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -17,7 +18,9 @@ fun main(args: Array<String>) {
     EngineMain.main(args)
 }
 
-fun Application.module() {
+fun Application.module(
+    appSettings: AppSettings = initAppSettings()
+) {
     // Порядок важен
     install(CachingHeaders)
     install(DefaultHeaders)
@@ -35,5 +38,5 @@ fun Application.module() {
     install(ContentNegotiation) {
         json(apiV1Mapper)
     }
-    configureRouting()
+    configureRouting(appSettings)
 }

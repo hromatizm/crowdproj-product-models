@@ -1,13 +1,11 @@
 package com.product.model
 
-import com.product.model.api.v1.models.IRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.configureRouting() {
+fun Application.configureRouting(appSettings: AppSettings) {
     routing {
         route("/") {
             get {
@@ -16,24 +14,19 @@ fun Application.configureRouting() {
         }
         route("/v1/pm") {
             post("/create") {
-                val req = call.receive<IRequest>()
-                call.respondText("Модель продукта сохранена", status = HttpStatusCode.Created)
+                call.createPm(appSettings)
             }
             post("/read") {
-                val req = call.receive<IRequest>()
-                call.respondText("Модель продукта найдена", status = HttpStatusCode.OK)
+                call.readPm(appSettings)
             }
             post("/update") {
-                val req = call.receive<IRequest>()
-                call.respondText("Модель продукта обновлена", status = HttpStatusCode.OK)
+                call.updatePm(appSettings)
             }
             post("/delete") {
-                val req = call.receive<IRequest>()
-                call.respondText("Модель продукта удалена", status = HttpStatusCode.OK)
+                call.deletePm(appSettings)
             }
             post("/search") {
-                val req = call.receive<IRequest>()
-                call.respondText("Рузультат поиска", status = HttpStatusCode.OK)
+                call.createPm(appSettings)
             }
         }
     }

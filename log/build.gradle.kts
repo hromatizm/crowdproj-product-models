@@ -50,8 +50,16 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coroutines.core)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.logback.classic)
+    implementation(libs.logback.logstash)
+    api(libs.logback.appenders)
+    api(libs.logger.fluentd)
+
     testImplementation(libs.kotest.junit5)
     testImplementation(kotlin("test"))
+
 }
 
 kotlin {

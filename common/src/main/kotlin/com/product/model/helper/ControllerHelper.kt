@@ -1,6 +1,6 @@
 package com.product.model.helper
 
-import com.product.model.AppSettings
+import com.product.model.IAppSettings
 import com.product.model.InnerPmContext
 import com.product.model.inner.InnerPmCommand
 import com.product.model.inner.InnerPmState
@@ -8,7 +8,7 @@ import com.product.model.toLog
 import kotlin.reflect.KClass
 import kotlin.time.Clock
 
-suspend inline fun <T> AppSettings.controllerHelper(
+suspend inline fun <T> IAppSettings.controllerHelper(
     crossinline getRequest: suspend InnerPmContext.() -> Unit,
     crossinline toResponse: suspend InnerPmContext.() -> T,
     clazz: KClass<*>,
