@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
-    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -29,7 +28,6 @@ dependencies {
     implementation(project(":api-v1"))
     implementation(project(":api-v1-mappers"))
     implementation(project(":log"))
-    implementation("io.ktor:ktor-serialization-jackson:3.4.0")
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.ktor.server.test.host)

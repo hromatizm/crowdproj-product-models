@@ -7,7 +7,7 @@ RUN gradle :ktor:buildFatJar --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-COPY --from=build /app/ktor/build/libs/*-all.jar ./app.jar
+COPY --from=build /app/ktor-rest/build/libs/*-all.jar ./app.jar
 
 EXPOSE 8080
 
