@@ -23,7 +23,7 @@ spring-boot = "3.2.0"
 muschko = "9.4.0"
 
 #Testing
-testcontainers = "1.19.7"
+testcontainers = "2.0.2"
 
 # BASE
 jvm-compiler = "17"
@@ -75,7 +75,7 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 ktor-server-websocket = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-
+ktor-server-kafka = { module = "io.github.flaxoos:ktor-server-kafka", version = "2.2.1" }
 
 # Spring
 spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
@@ -89,11 +89,12 @@ kafka-client = { module = "org.apache.kafka:kafka-clients", version = "3.7.0" }
 
 # Testing
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotest-core   = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
-mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.1" }
+kotest-testcontainers = { module = "io.kotest:kotest-extensions-testcontainers", version.ref = "kotest" }
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq", version.ref = "testcontainers" }
+testcontainers-kafka = { module = "org.testcontainers:testcontainers-kafka", version.ref = "testcontainers" }
 
 [bundles]
 kotest = ["kotest-junit5", "kotest-core", "kotest-property"]

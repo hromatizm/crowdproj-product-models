@@ -1,0 +1,8 @@
+services:
+  ktor-rest:
+    build:
+      context: ../
+      dockerfile: app-ktor-rest/Dockerfile
+    container_name: ktor-rest
+    ports:
+      - "8081:8081"
