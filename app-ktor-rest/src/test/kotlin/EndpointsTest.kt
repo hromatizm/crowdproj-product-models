@@ -1,6 +1,5 @@
-package com.example
+package com.product.model
 
-import com.product.model.module
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.*

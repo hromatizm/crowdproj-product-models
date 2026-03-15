@@ -19,7 +19,8 @@ dependencies {
     implementation(project(":log"))
 
     testImplementation(libs.kotest.junit5)
-    testImplementation(kotlin("test"))
+    testImplementation(libs.kotest.testcontainers)
+    testImplementation(libs.testcontainers.kafka)
 }
 
 tasks.jar {
