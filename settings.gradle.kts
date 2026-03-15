@@ -12,6 +12,6 @@ dependencyResolutionManagement {
 include("api-v1")
 include("common")
 include("api-v1-mappers")
-include("ktor-rest")
 include("log")
-include("ktor-kafka")
+include("app-ktor-rest")
+include("app-kafka")

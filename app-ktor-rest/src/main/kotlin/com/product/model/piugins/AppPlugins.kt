@@ -5,7 +5,7 @@ import com.product.model.CorSettings
 import com.product.model.PmProcessor
 import io.ktor.server.application.*
 
-fun Application.initAppSettings(): AppSettings {
+fun Application.initRestAppSettings(): AppSettings {
     val corSettings = CorSettings(
         loggerProvider = getLoggerProviderConf()
     )
