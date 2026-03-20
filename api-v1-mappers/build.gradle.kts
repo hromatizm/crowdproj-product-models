@@ -6,6 +6,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":common"))
     implementation(project(":api-v1"))
+    implementation(project(":log"))
     testImplementation(libs.kotest.junit5)
 }
 

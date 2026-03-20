@@ -1,11 +1,11 @@
 import com.product.model.api.v1.models.*
+import com.product.model.apiV1RequestDeserialize
+import com.product.model.apiV1RequestSerialize
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import ru.otus.otuskotlin.marketplace.api.v2.apiV1RequestDeserialize
-import ru.otus.otuskotlin.marketplace.api.v2.apiV1RequestSerialize
 
 private const val PM_NAME = "test pm name"
 private const val PM_DESCRIPTION = "test pm description"

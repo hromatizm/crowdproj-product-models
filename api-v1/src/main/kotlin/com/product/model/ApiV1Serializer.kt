@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package ru.otus.otuskotlin.marketplace.api.v2
+package com.product.model
 
 import com.product.model.api.v1.models.IRequest
 import com.product.model.api.v1.models.IResponse
