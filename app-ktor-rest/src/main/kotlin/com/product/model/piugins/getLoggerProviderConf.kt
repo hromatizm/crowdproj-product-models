@@ -2,7 +2,7 @@ package com.product.model.piugins
 
 import com.product.model.logback.pmLoggerLogback
 import io.ktor.server.application.*
-import ru.otus.otuskotlin.marketplace.logging.common.PmLoggerProvider
+import com.product.model.PmLoggerProvider
 
 fun Application.getLoggerProviderConf(): PmLoggerProvider =
     when (val mode = environment.config.propertyOrNull("ktor.logger")?.getString()) {

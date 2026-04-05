@@ -1,9 +1,8 @@
-package ru.otus.otuskotlin.marketplace.logging.jvm
+package com.product.model.logback
 
 import ch.qos.logback.classic.Logger
 import com.product.model.IPmLogWrapper
 import com.product.model.LogLevel
-import com.product.model.logback.DefaultMarker
 import net.logstash.logback.argument.StructuredArguments
 import org.slf4j.Marker
 import org.slf4j.event.KeyValuePair

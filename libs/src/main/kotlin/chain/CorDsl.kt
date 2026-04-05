@@ -35,7 +35,7 @@ fun <T> ICorChainDsl<T>.chain(block: ICorChainDsl<T>.() -> Unit) {
     )
 }
 
-fun <T> ICorChainDsl<T>.worker(title: String, description: String, blockHandle: suspend T.() -> Unit) {
+fun <T> ICorChainDsl<T>.worker(title: String, description: String = "", blockHandle: suspend T.() -> Unit) {
     worker {
         this.title = title
         this.description = description

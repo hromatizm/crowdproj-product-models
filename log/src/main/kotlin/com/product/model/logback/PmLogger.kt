@@ -3,7 +3,6 @@ package com.product.model.logback
 import ch.qos.logback.classic.Logger
 import com.product.model.IPmLogWrapper
 import org.slf4j.LoggerFactory
-import ru.otus.otuskotlin.marketplace.logging.jvm.PmLogWrapperLogback
 import kotlin.reflect.KClass
 
 /**
