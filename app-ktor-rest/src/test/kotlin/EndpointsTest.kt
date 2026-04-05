@@ -44,9 +44,9 @@ class EndpointsTest : FunSpec({
                         "stub": "success"
                       },
                       "pm": {
-                        "name": "iPhone 15 Pro 256GB",
+                        "name": "Ноутбук ASUS ZenBook 14",
                         "description": "Тестовая модель товара для проверки create",
-                        "productGroupId": "product-group-0001"
+                        "productGroupId": "laptop-1"
                       }
                     }
                     """.trimIndent()

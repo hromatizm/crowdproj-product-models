@@ -1,7 +1,7 @@
 package validation
 
 import com.product.model.CorSettings
-import com.product.model.PmProcessor
+import com.product.model.processor.PmProcessor
 import com.product.model.inner.InnerPmCommand
 
 abstract class BaseLogicValidationTest {

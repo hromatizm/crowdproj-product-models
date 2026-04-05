@@ -1,8 +1,8 @@
-package ru.otus.otuskotlin.marketplace.biz.stub
+package stub
 
 import com.product.model.InnerPmContext
-import com.product.model.PmProcessor
 import com.product.model.inner.*
+import com.product.model.processor.PmProcessor
 import com.product.model.stubs.PmStub
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe

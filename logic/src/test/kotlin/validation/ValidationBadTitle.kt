@@ -1,7 +1,7 @@
 package validation
 
 import com.product.model.InnerPmContext
-import com.product.model.PmProcessor
+import com.product.model.processor.PmProcessor
 import com.product.model.inner.*
 import com.product.model.stubs.PmStub
 import kotlinx.coroutines.test.runTest

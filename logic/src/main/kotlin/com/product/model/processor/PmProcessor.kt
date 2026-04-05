@@ -1,7 +1,10 @@
-package com.product.model
+package com.product.model.processor
 
 import chain.rootChain
 import chain.worker
+import com.product.model.CorSettings
+import com.product.model.IProcessor
+import com.product.model.InnerPmContext
 import com.product.model.general.initStatus
 import com.product.model.general.operation
 import com.product.model.general.stubs
@@ -14,8 +17,9 @@ import com.product.model.validation.*
 
 class PmProcessor(
     private val corSettings: CorSettings = CorSettings.NONE
-) {
-    suspend fun exec(ctx: InnerPmContext) = businessChain.exec(ctx.also { it.corSettings = corSettings })
+) : IProcessor {
+
+    override suspend fun exec(ctx: InnerPmContext) = businessChain.exec(ctx.also { it.corSettings = corSettings })
 
     private val businessChain = rootChain<InnerPmContext> {
         initStatus("Инициализация статуса")

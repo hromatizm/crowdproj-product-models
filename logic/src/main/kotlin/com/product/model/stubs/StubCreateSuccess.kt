@@ -12,7 +12,7 @@ import com.product.model.inner.InnerPmUserId
 
 fun ICorChainDsl<InnerPmContext>.stubCreateSuccess(title: String, corSettings: CorSettings) = worker {
     this.title = title
-    this.description = "Кейс успешного создания модели мродукта"
+    this.description = "Кейс успешного создания модели продукта"
     on { stubCase == InnerPmStubs.SUCCESS && state == InnerPmState.RUNNING }
     val logger = corSettings.loggerProvider.logger("stubOffersSuccess")
     process {

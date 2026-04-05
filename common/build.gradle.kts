@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     implementation(libs.kotlinx.datetime)
-    testImplementation(kotlin("test"))
     implementation(project(":log"))
+    testImplementation(kotlin("test"))
 }
 
 kotlin {

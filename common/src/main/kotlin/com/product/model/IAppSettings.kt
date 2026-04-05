@@ -1,6 +1,6 @@
 package com.product.model
 
 interface IAppSettings {
-    val processor: PmProcessor
+    val processor: IProcessor
     val corSettings: CorSettings
 }
