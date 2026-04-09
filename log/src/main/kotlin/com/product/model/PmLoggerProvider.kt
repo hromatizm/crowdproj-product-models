@@ -1,6 +1,5 @@
-package ru.otus.otuskotlin.marketplace.logging.common
+package com.product.model
 
-import com.product.model.IPmLogWrapper
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 

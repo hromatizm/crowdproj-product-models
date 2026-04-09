@@ -30,10 +30,12 @@ private fun PmDebug?.transportToStubCase(): InnerPmStubs = when (this?.stub) {
     PmRequestDebugStubs.SUCCESS -> InnerPmStubs.SUCCESS
     PmRequestDebugStubs.NOT_FOUND -> InnerPmStubs.NOT_FOUND
     PmRequestDebugStubs.BAD_ID -> InnerPmStubs.BAD_ID
-    PmRequestDebugStubs.BAD_TITLE -> InnerPmStubs.BAD_TITLE
+    PmRequestDebugStubs.BAD_OWNER_ID -> InnerPmStubs.BAD_OWNER_ID
+    PmRequestDebugStubs.BAD_NAME -> InnerPmStubs.BAD_NAME
     PmRequestDebugStubs.BAD_DESCRIPTION -> InnerPmStubs.BAD_DESCRIPTION
     PmRequestDebugStubs.CANNOT_DELETE -> InnerPmStubs.CANNOT_DELETE
     PmRequestDebugStubs.BAD_SEARCH_STRING -> InnerPmStubs.BAD_SEARCH_STRING
+    PmRequestDebugStubs.DB_ERROR -> InnerPmStubs.DB_ERROR
     null -> InnerPmStubs.NONE
 }
 

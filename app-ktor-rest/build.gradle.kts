@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":api-v1"))
     implementation(project(":api-v1-mappers"))
     implementation(project(":log"))
+    implementation(project(":logic"))
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.ktor.server.test.host)

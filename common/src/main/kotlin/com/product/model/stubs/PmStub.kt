@@ -1,6 +1,7 @@
 package com.product.model.stubs
 
 import com.product.model.inner.InnerPm
+import com.product.model.inner.InnerPmFilter
 import com.product.model.inner.InnerPmId
 import com.product.model.stubs.PmStubLaptop.PM_LAPTOP_ASUS_ZEN_BOOK_14
 
@@ -9,7 +10,7 @@ object PmStub {
 
     fun prepareResult(block: InnerPm.() -> Unit): InnerPm = get().apply(block)
 
-    fun prepareSearchList(filter: String) = listOf(
+    fun prepareSearchList(filter: InnerPmFilter) = listOf(
         innerPm("d-666-01", filter),
         innerPm("d-666-02", filter),
         innerPm("d-666-03", filter),
@@ -18,9 +19,9 @@ object PmStub {
         innerPm("d-666-06", filter),
     )
 
-    private fun innerPm(id: String, filter: String) = PM_LAPTOP_ASUS_ZEN_BOOK_14.copy(
+    private fun innerPm(id: String, filter: InnerPmFilter) = PM_LAPTOP_ASUS_ZEN_BOOK_14.copy(
         id = InnerPmId(id),
-        name = "$filter $id",
-        description = "description $filter $id",
+        name = "${filter.name} $id",
+        description = "${filter.description} $id",
     )
 }

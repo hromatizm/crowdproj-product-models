@@ -1,6 +1,9 @@
 package com.product.model.helper
 
+import com.product.model.InnerPmContext
+import com.product.model.LogLevel
 import com.product.model.inner.InnerPmError
+import com.product.model.inner.InnerPmState
 
 fun Throwable.asPmError(
     code: String = "unknown",
@@ -12,4 +15,28 @@ fun Throwable.asPmError(
     field = "",
     message = message,
     exception = this,
+)
+
+fun InnerPmContext.addError(vararg error: InnerPmError) = errors.addAll(error)
+
+fun InnerPmContext.fail(error: InnerPmError) {
+    addError(error)
+    state = InnerPmState.FAILING
+}
+
+fun errorValidation(
+    field: String,
+    /**
+     * Код, характеризующий ошибку. Не должен включать имя поля или указание на валидацию.
+     * Например: empty, badSymbols, tooLong, etc
+     */
+    violationCode: String,
+    description: String,
+    level: LogLevel = LogLevel.ERROR,
+) = InnerPmError(
+    code = "validation-$field-$violationCode",
+    field = field,
+    group = "validation",
+    message = "Validation error for field $field: $description",
+    level = level,
 )

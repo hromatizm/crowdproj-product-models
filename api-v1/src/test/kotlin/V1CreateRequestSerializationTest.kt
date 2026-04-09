@@ -22,7 +22,7 @@ class V1RequestSerializationTest : FunSpec({
         ),
         debug = PmDebug(
             mode = PmRequestDebugMode.STUB,
-            stub = PmRequestDebugStubs.BAD_TITLE
+            stub = PmRequestDebugStubs.BAD_NAME
         )
     )
 
@@ -39,7 +39,7 @@ class V1RequestSerializationTest : FunSpec({
         pmObject["name"]?.jsonPrimitive?.content shouldBe PM_NAME
         pmObject["description"]?.jsonPrimitive?.content shouldBe PM_DESCRIPTION
         debugObject["mode"]?.jsonPrimitive?.content shouldBe "stub"
-        debugObject["stub"]?.jsonPrimitive?.content shouldBe "badTitle"
+        debugObject["stub"]?.jsonPrimitive?.content shouldBe "badName"
     }
 
     test("deserialize successfully") {

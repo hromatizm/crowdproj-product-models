@@ -397,7 +397,9 @@ components:
         - success
         - notFound
         - badId
-        - badTitle
+        - badName
         - badDescription
+        - badOwnerId
         - cannotDelete
         - badSearchString
+        - dbError

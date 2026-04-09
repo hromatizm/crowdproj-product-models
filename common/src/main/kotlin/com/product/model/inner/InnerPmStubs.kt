@@ -2,12 +2,13 @@ package com.product.model.inner
 
 enum class InnerPmStubs {
     NONE,
-    SUCCESS,
-    NOT_FOUND,
-    BAD_ID,
-    BAD_TITLE,
     BAD_DESCRIPTION,
-    CANNOT_DELETE,
+    BAD_ID,
+    BAD_NAME,
+    BAD_OWNER_ID,
     BAD_SEARCH_STRING,
+    CANNOT_DELETE,
     DB_ERROR,
+    NOT_FOUND,
+    SUCCESS,
 }

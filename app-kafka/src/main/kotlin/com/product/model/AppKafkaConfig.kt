@@ -1,7 +1,7 @@
 package com.product.model
 
 import com.product.model.logback.pmLoggerLogback
-import ru.otus.otuskotlin.marketplace.logging.common.PmLoggerProvider
+import com.product.model.processor.PmProcessor
 
 class AppKafkaConfig(
     val kafkaHosts: List<String> = KAFKA_HOSTS,

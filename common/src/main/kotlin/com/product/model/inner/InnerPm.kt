@@ -10,6 +10,11 @@ data class InnerPm(
     var lock: InnerPmLock = InnerPmLock.NONE,
     val permissions: MutableSet<InnerPmPermission> = mutableSetOf(),
 ) {
+
+    fun deepCopy(): InnerPm = copy(
+        permissions = permissions.toMutableSet(),
+    )
+
     fun isEmpty() = this == NONE
 
     companion object {
