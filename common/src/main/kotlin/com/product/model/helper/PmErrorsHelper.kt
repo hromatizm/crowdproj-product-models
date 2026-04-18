@@ -40,3 +40,16 @@ fun errorValidation(
     message = "Validation error for field $field: $description",
     level = level,
 )
+
+fun errorSystem(
+    violationCode: String,
+    level: LogLevel = LogLevel.ERROR,
+    e: Throwable,
+) = InnerPmError(
+    code = "system-$violationCode",
+    group = "system",
+    message = "System error occurred. Our stuff has been informed, please retry later",
+    level = level,
+    exception = e,
+)
+
