@@ -14,9 +14,6 @@ import kotlin.test.assertNotEquals
 
 class LogicRepoCreateTest {
 
-    private val userId = InnerPmUserId("321")
-    private val command = InnerPmCommand.CREATE
-    private val uuid = "10000000-0000-0000-0000-000000000001"
     private val repo = PmRepoInMemory()
     private val settings = CorSettings(
         repoTest = repo
@@ -26,10 +23,9 @@ class LogicRepoCreateTest {
     @Test
     fun repoCreateSuccessTest() = runTest {
         val ctx = InnerPmContext(
-            command = command,
+            command = InnerPmCommand.CREATE,
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
-            pmRepo = repo,
             pmRequest = InnerPm(
                 name = "abc",
                 description = "abc",

@@ -14,7 +14,9 @@ import com.product.model.inner.InnerPmId
 import com.product.model.inner.InnerPmLock
 import com.product.model.inner.InnerPmState
 import com.product.model.inner.InnerPmUserId
+import com.product.model.inner.InnerPmWorkMode
 import com.product.model.repo.checkLock
+import com.product.model.repo.initRepo
 import com.product.model.repo.prepareResult
 import com.product.model.repo.repoCreate
 import com.product.model.repo.repoDelete
@@ -31,10 +33,13 @@ class PmProcessor(
     private val corSettings: CorSettings = CorSettings.NONE
 ) : IProcessor {
 
-    override suspend fun exec(ctx: InnerPmContext) = businessChain.exec(ctx.also { it.corSettings = corSettings })
+    override suspend fun exec(ctx: InnerPmContext) = businessChain.exec(
+        ctx.also { it.corSettings = corSettings }
+    )
 
     private val businessChain = rootChain<InnerPmContext> {
         initStatus("Инициализация статуса")
+        initRepo("Инициализация репозитория")
 
         operation("Создание объявления", InnerPmCommand.CREATE) {
             stubs("Обработка стабов") {
@@ -108,9 +113,6 @@ class PmProcessor(
                 worker("Очистка lock") { pmValidating.lock = InnerPmLock(pmValidating.lock.asString().trim()) }
                 worker("Очистка наименования") { pmValidating.name = pmValidating.name.trim() }
                 worker("Очистка описания") { pmValidating.description = pmValidating.description.trim() }
-                worker("Очистка id владельца") {
-                    pmValidating.ownerId = InnerPmUserId(pmValidating.ownerId.asString().trim())
-                }
                 validateIdNotEmpty("Проверка на непустой id")
                 validateIdProperFormat("Проверка формата id")
                 validateLockNotEmpty("Проверка на непустой lock")
@@ -119,8 +121,6 @@ class PmProcessor(
                 validateNameHasContent("Проверка на наличие содержания в наименовании")
                 validateDescriptionNotEmpty("Проверка на непустое описание")
                 validateDescriptionHasContent("Проверка на наличие содержания в описании")
-                validateOwnerIdNotEmpty("Проверка на непустой id владельца")
-                validateOwnerIdProperFormat("Проверка формата id владельца")
                 finishPmValidation("Успешное завершение процедуры валидации")
             }
             chain {

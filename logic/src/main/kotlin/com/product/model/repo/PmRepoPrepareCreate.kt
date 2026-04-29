@@ -12,6 +12,5 @@ fun ICorChainDsl<InnerPmContext>.repoPrepareCreate(title: String) = worker {
     on { state == InnerPmState.RUNNING }
     process {
         pmRepoPrepare = pmValidated.deepCopy()
-        pmRepoPrepare.ownerId = PmStub.get().ownerId
     }
 }

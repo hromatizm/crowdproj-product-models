@@ -55,7 +55,6 @@ class LogicRepoUpdateTest {
             command = command,
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
-            pmRepo = repo,
             pmRequest = pmToUpdate,
         )
         processor.exec(ctx)

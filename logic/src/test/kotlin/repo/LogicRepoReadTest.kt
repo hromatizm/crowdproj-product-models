@@ -36,7 +36,6 @@ class LogicRepoReadTest {
             command = command,
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
-            pmRepo = repo,
             pmRequest = InnerPm(
                 id = InnerPmId("123"),
             ),

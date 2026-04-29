@@ -36,7 +36,6 @@ class LogicRepoSearchTest {
             command = command,
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
-            pmRepo = repo,
             pmFilterRequest = InnerPmFilter(
                 name = "abc",
                 description = "abc"

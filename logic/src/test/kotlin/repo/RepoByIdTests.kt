@@ -35,7 +35,6 @@ fun repoNotFoundTest(command: InnerPmCommand) = runTest {
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = repo,
         pmRequest = InnerPm(
             id = InnerPmId("12345"),
             name = "xyz",

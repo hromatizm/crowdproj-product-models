@@ -55,7 +55,6 @@ class LogicRepoDeleteTest {
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
             pmRequest = adToUpdate,
-            pmRepo = repo,
         )
         processor.exec(ctx)
         assertEquals(InnerPmState.FINISHING, ctx.state)

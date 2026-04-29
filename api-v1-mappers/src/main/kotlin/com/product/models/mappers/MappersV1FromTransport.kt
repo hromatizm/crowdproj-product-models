@@ -17,7 +17,7 @@ fun InnerPmContext.fromTransport(request: IRequest) = when (request) {
 private fun String?.toInnerPmId() = this?.let { InnerPmId(it) } ?: InnerPmId.NONE
 private fun String?.toInnerPmLock() = this?.let { InnerPmLock(it) } ?: InnerPmLock.NONE
 private fun String?.toInnerPmProductGroupId() = this?.let { InnerPmProductGroupId(it) } ?: InnerPmProductGroupId.NONE
-
+private fun String?.toInnerPmUserId() = this?.let { InnerPmUserId(it) } ?: InnerPmUserId.NONE
 
 private fun PmDebug?.transportToWorkMode(): InnerPmWorkMode = when (this?.mode) {
     PmRequestDebugMode.PROD -> InnerPmWorkMode.PROD
@@ -99,6 +99,7 @@ private fun PmCreateObject.toInternal() =
     InnerPm(
         name = this.name ?: "",
         description = this.description ?: "",
+        ownerId = this.ownerId.toInnerPmUserId(),
         productGroupId = this.productGroupId.toInnerPmProductGroupId(),
     )
 

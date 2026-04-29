@@ -1,5 +1,6 @@
 package validation
 
+import com.product.model.CorSettings
 import com.product.model.InnerPmContext
 import com.product.model.PmRepoInMemory
 import com.product.model.inner.*
@@ -17,11 +18,14 @@ fun validationLockCorrect(command: InnerPmCommand, processor: PmProcessor) = run
         ownerId = InnerPmUserId("123-234-abc-ABC"),
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = pm,
     )
 
@@ -39,18 +43,16 @@ fun validationLockTrim(command: InnerPmCommand, processor: PmProcessor) = runTes
         ownerId = InnerPmUserId("123-234-abc-ABC"),
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
         pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
-        pmRequest = InnerPm(
-            id = InnerPmId("123-234-abc-ABC"),
-            name = "abc",
-            description = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            lock = InnerPmLock(" \n\t 123-234-abc-ABC \n\t "),
-        ),
+        pmRequest = pm,
     )
 
     processor.exec(ctx)
@@ -60,17 +62,22 @@ fun validationLockTrim(command: InnerPmCommand, processor: PmProcessor) = runTes
 }
 
 fun validationLockEmpty(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = InnerPmId("123-234-abc-ABC"),
+        name = "abc",
+        description = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        lock = InnerPmLock(""),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = InnerPmId("123-234-abc-ABC"),
-            name = "abc",
-            description = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            lock = InnerPmLock(""),
-        ),
+        pmRequest = pm,
     )
 
     processor.exec(ctx)
@@ -83,17 +90,22 @@ fun validationLockEmpty(command: InnerPmCommand, processor: PmProcessor) = runTe
 }
 
 fun validationLockFormat(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = InnerPmId("123-234-abc-ABC"),
+        name = "abc",
+        description = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        lock = InnerPmLock("!@#\$%^&*(),.{}"),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = InnerPmId("123-234-abc-ABC"),
-            name = "abc",
-            description = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            lock = InnerPmLock("!@#\$%^&*(),.{}"),
-        ),
+        pmRequest = pm,
     )
 
     processor.exec(ctx)

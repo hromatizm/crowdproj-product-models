@@ -1,9 +1,10 @@
 package validation
 
+import com.product.model.CorSettings
 import com.product.model.InnerPmContext
 import com.product.model.PmRepoInMemory
-import com.product.model.processor.PmProcessor
 import com.product.model.inner.*
+import com.product.model.processor.PmProcessor
 import com.product.model.stubs.PmStub
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -20,11 +21,14 @@ fun validationNameCorrect(command: InnerPmCommand, processor: PmProcessor) = run
         ownerId = InnerPmUserId("567-678-xyz-XYZ"),
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = pm,
     )
     processor.exec(ctx)
@@ -41,11 +45,14 @@ fun validationNameTrim(command: InnerPmCommand, processor: PmProcessor) = runTes
         ownerId = InnerPmUserId("567-678-xyz-XYZ"),
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = pm,
     )
     processor.exec(ctx)
@@ -55,17 +62,22 @@ fun validationNameTrim(command: InnerPmCommand, processor: PmProcessor) = runTes
 }
 
 fun validationNameEmpty(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "",
+        description = "abc",
+        ownerId = InnerPmUserId("567-678-xyz-XYZ"),
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "",
-            description = "abc",
-            ownerId = InnerPmUserId("567-678-xyz-XYZ"),
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRequest = pm,
     )
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
@@ -76,17 +88,22 @@ fun validationNameEmpty(command: InnerPmCommand, processor: PmProcessor) = runTe
 }
 
 fun validationNameSymbols(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = InnerPmId("123"),
+        name = "!@#$%^&*(),.{}",
+        ownerId = InnerPmUserId("567-678-xyz-XYZ"),
+        description = "abc",
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = InnerPmId("123"),
-            name = "!@#$%^&*(),.{}",
-            ownerId = InnerPmUserId("567-678-xyz-XYZ"),
-            description = "abc",
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRequest = pm,
     )
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)

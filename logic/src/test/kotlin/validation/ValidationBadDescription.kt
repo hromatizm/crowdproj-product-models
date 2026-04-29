@@ -1,13 +1,14 @@
 package validation
 
+import com.product.model.CorSettings
 import com.product.model.InnerPmContext
 import com.product.model.PmRepoInMemory
-import com.product.model.processor.PmProcessor
 import com.product.model.inner.*
+import com.product.model.processor.PmProcessor
 import com.product.model.stubs.PmStub
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContains
 
 private val stub = PmStub.get()
@@ -20,14 +21,17 @@ fun validationDescriptionCorrect(command: InnerPmCommand, processor: PmProcessor
         description = "abc",
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = pm,
     )
-    
+
     processor.exec(ctx)
 
     assertEquals(0, ctx.errors.size)
@@ -43,11 +47,14 @@ fun validationDescriptionTrim(command: InnerPmCommand, processor: PmProcessor) =
         description = " \n\tabc \n\t",
         lock = InnerPmLock("123-234-abc-ABC"),
     )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = pm,
     )
 
@@ -59,17 +66,22 @@ fun validationDescriptionTrim(command: InnerPmCommand, processor: PmProcessor) =
 }
 
 fun validationDescriptionEmpty(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        description = "",
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            description = "",
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRequest = pm,
     )
 
     processor.exec(ctx)
@@ -82,17 +94,22 @@ fun validationDescriptionEmpty(command: InnerPmCommand, processor: PmProcessor) 
 }
 
 fun validationDescriptionSymbols(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        description = "!@#$%^&*(),.{}",
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
+    val settings = CorSettings(
+        repoTest = PmRepoInMemory().apply { save(listOf(pm)) },
+    )
+    val processor = PmProcessor(settings)
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            description = "!@#$%^&*(),.{}",
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRequest = pm,
     )
 
     processor.exec(ctx)
