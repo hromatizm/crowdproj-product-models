@@ -14,6 +14,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.coroutines.test)
+    testImplementation(project(":repo-test"))
 }
 
 kotlin {
