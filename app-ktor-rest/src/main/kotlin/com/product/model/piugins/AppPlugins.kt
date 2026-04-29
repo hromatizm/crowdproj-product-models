@@ -6,7 +6,7 @@ import com.product.model.PmRepoStub
 import com.product.model.processor.PmProcessor
 import io.ktor.server.application.*
 
-fun Application.initRestAppSettings(): AppSettings {
+fun Application.initAppSettings(): AppSettings {
     val corSettings = CorSettings(
         loggerProvider = getLoggerProviderConf(),
         repoTest = getDatabaseConf(PmDbType.TEST),

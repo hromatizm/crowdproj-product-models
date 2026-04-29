@@ -1,16 +1,14 @@
 package com.product.model
 
-import com.product.model.logback.pmLoggerLogback
 import com.product.model.processor.PmProcessor
 
 class AppKafkaConfig(
+    val env: Map<String, Any?>,
     val kafkaHosts: List<String> = KAFKA_HOSTS,
     val kafkaGroupId: String = KAFKA_GROUP_ID,
     val kafkaTopicInV1: String = KAFKA_TOPIC_IN_V1,
     val kafkaTopicOutV1: String = KAFKA_TOPIC_OUT_V1,
-    override val corSettings: CorSettings = CorSettings(
-        loggerProvider = PmLoggerProvider { pmLoggerLogback(it) }
-    ),
+    override val corSettings: CorSettings = initCorSettings(env),
     override val processor: PmProcessor = PmProcessor(corSettings),
 ): IAppSettings {
     companion object {

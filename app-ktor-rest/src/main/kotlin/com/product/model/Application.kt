@@ -1,6 +1,6 @@
 package com.product.model
 
-import com.product.model.piugins.initRestAppSettings
+import com.product.model.piugins.initAppSettings
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module(
-    appSettings: AppSettings = initRestAppSettings()
+    appSettings: AppSettings = initAppSettings()
 ) {
     // Порядок важен
     install(CachingHeaders)

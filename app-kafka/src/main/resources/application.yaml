@@ -1,0 +1,10 @@
+product-model:
+  repository:
+    test: "inmemory"
+    prod: "inmemory"
+    cassandra:
+      keyspace: "product-model"
+      host: "localhost"
+      port: "9042"
+      user: "cassandra"
+      pass: "cassandra"
