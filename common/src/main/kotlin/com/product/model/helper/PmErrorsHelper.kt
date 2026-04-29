@@ -18,9 +18,15 @@ fun Throwable.asPmError(
 )
 
 fun InnerPmContext.addError(vararg error: InnerPmError) = errors.addAll(error)
+fun InnerPmContext.addErrors(error: Collection<InnerPmError>) = errors.addAll(error)
 
 fun InnerPmContext.fail(error: InnerPmError) {
     addError(error)
+    state = InnerPmState.FAILING
+}
+
+fun InnerPmContext.fail(errors: Collection<InnerPmError>) {
+    addErrors(errors)
     state = InnerPmState.FAILING
 }
 

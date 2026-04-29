@@ -1,6 +1,7 @@
 package validation
 
 import com.product.model.InnerPmContext
+import com.product.model.PmRepoInMemory
 import com.product.model.inner.InnerPmCommand
 import com.product.model.inner.InnerPmFilter
 import com.product.model.inner.InnerPmState
@@ -19,7 +20,8 @@ class LogicValidationSearchTest : BaseLogicValidationTest() {
             command = command,
             state = InnerPmState.NONE,
             workMode = InnerPmWorkMode.TEST,
-            pmFilterRequest = InnerPmFilter()
+            pmFilterRequest = InnerPmFilter(),
+            pmRepo = PmRepoInMemory(),
         )
         processor.exec(ctx)
         assertEquals(0, ctx.errors.size)

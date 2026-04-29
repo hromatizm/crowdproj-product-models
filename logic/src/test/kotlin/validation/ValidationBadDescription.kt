@@ -1,6 +1,7 @@
 package validation
 
 import com.product.model.InnerPmContext
+import com.product.model.PmRepoInMemory
 import com.product.model.processor.PmProcessor
 import com.product.model.inner.*
 import com.product.model.stubs.PmStub
@@ -12,17 +13,19 @@ import kotlin.test.assertContains
 private val stub = PmStub.get()
 
 fun validationDescriptionCorrect(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        description = "abc",
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            description = "abc",
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
+        pmRequest = pm,
     )
     
     processor.exec(ctx)
@@ -33,17 +36,19 @@ fun validationDescriptionCorrect(command: InnerPmCommand, processor: PmProcessor
 }
 
 fun validationDescriptionTrim(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        description = " \n\tabc \n\t",
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            description = " \n\tabc \n\t",
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
+        pmRequest = pm,
     )
 
     processor.exec(ctx)

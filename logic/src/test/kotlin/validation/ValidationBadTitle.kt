@@ -1,6 +1,7 @@
 package validation
 
 import com.product.model.InnerPmContext
+import com.product.model.PmRepoInMemory
 import com.product.model.processor.PmProcessor
 import com.product.model.inner.*
 import com.product.model.stubs.PmStub
@@ -12,17 +13,19 @@ import kotlin.test.assertContains
 private val stub = PmStub.get()
 
 fun validationNameCorrect(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = "abc",
+        description = "abc",
+        ownerId = InnerPmUserId("567-678-xyz-XYZ"),
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = "abc",
-            description = "abc",
-            ownerId = InnerPmUserId("567-678-xyz-XYZ"),
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
+        pmRequest = pm,
     )
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
@@ -31,17 +34,19 @@ fun validationNameCorrect(command: InnerPmCommand, processor: PmProcessor) = run
 }
 
 fun validationNameTrim(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = stub.id,
+        name = " \n\t abc \t\n ",
+        description = "abc",
+        ownerId = InnerPmUserId("567-678-xyz-XYZ"),
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = stub.id,
-            name = " \n\t abc \t\n ",
-            description = "abc",
-            ownerId = InnerPmUserId("567-678-xyz-XYZ"),
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
+        pmRequest = pm,
     )
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)

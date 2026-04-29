@@ -4,16 +4,9 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib"))
-
-    implementation(project(":libs"))
-    implementation(project(":log"))
     implementation(project(":common"))
-    implementation(project(":repo-common"))
-    implementation(project(":repo-inmemory"))
-
-    testImplementation(kotlin("test"))
+    implementation(project(":repo-test"))
     testImplementation(libs.kotest.junit5)
-    testImplementation(libs.coroutines.test)
 }
 
 kotlin {

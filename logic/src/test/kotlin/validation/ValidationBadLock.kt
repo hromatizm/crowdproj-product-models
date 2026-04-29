@@ -1,25 +1,28 @@
 package validation
 
 import com.product.model.InnerPmContext
-import com.product.model.processor.PmProcessor
+import com.product.model.PmRepoInMemory
 import com.product.model.inner.*
+import com.product.model.processor.PmProcessor
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import kotlin.test.assertContains
 
 fun validationLockCorrect(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = InnerPmId("123-234-abc-ABC"),
+        name = "abc",
+        description = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
-        pmRequest = InnerPm(
-            id = InnerPmId("123-234-abc-ABC"),
-            name = "abc",
-            description = "abc",
-            ownerId = InnerPmUserId("123-234-abc-ABC"),
-            lock = InnerPmLock("123-234-abc-ABC"),
-        ),
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
+        pmRequest = pm,
     )
 
     processor.exec(ctx)
@@ -29,10 +32,18 @@ fun validationLockCorrect(command: InnerPmCommand, processor: PmProcessor) = run
 }
 
 fun validationLockTrim(command: InnerPmCommand, processor: PmProcessor) = runTest {
+    val pm = InnerPm(
+        id = InnerPmId("123-234-abc-ABC"),
+        name = "abc",
+        description = "abc",
+        ownerId = InnerPmUserId("123-234-abc-ABC"),
+        lock = InnerPmLock("123-234-abc-ABC"),
+    )
     val ctx = InnerPmContext(
         command = command,
         state = InnerPmState.NONE,
         workMode = InnerPmWorkMode.TEST,
+        pmRepo = PmRepoInMemory().apply { save(listOf(pm)) },
         pmRequest = InnerPm(
             id = InnerPmId("123-234-abc-ABC"),
             name = "abc",

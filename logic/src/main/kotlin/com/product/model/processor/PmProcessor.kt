@@ -1,5 +1,6 @@
 package com.product.model.processor
 
+import chain.chain
 import chain.rootChain
 import chain.worker
 import com.product.model.CorSettings
@@ -11,7 +12,18 @@ import com.product.model.general.stubs
 import com.product.model.inner.InnerPmCommand
 import com.product.model.inner.InnerPmId
 import com.product.model.inner.InnerPmLock
+import com.product.model.inner.InnerPmState
 import com.product.model.inner.InnerPmUserId
+import com.product.model.repo.checkLock
+import com.product.model.repo.prepareResult
+import com.product.model.repo.repoCreate
+import com.product.model.repo.repoDelete
+import com.product.model.repo.repoPrepareCreate
+import com.product.model.repo.repoPrepareDelete
+import com.product.model.repo.repoPrepareUpdate
+import com.product.model.repo.repoRead
+import com.product.model.repo.repoSearch
+import com.product.model.repo.repoUpdate
 import com.product.model.stubs.*
 import com.product.model.validation.*
 
@@ -49,6 +61,12 @@ class PmProcessor(
                 validateOwnerIdProperFormat("Проверка формата id владельца")
                 finishPmValidation("Завершение проверок")
             }
+            chain {
+                title = "Логика сохранения"
+                repoPrepareCreate("Подготовка объекта для сохранения")
+                repoCreate("Создание объявления в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Получить объявление", InnerPmCommand.READ) {
             stubs("Обработка стабов") {
@@ -64,6 +82,16 @@ class PmProcessor(
                 validateIdProperFormat("Проверка формата id")
                 finishPmValidation("Успешное завершение процедуры валидации")
             }
+            chain {
+                title = "Логика чтения"
+                repoRead("Чтение модели продукта из БД")
+                worker {
+                    title = "Подготовка ответа для Read"
+                    on { state == InnerPmState.RUNNING }
+                    process { pmRepoDone = pmRepoRead }
+                }
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Изменить объявление", InnerPmCommand.UPDATE) {
             stubs("Обработка стабов") {
@@ -95,6 +123,14 @@ class PmProcessor(
                 validateOwnerIdProperFormat("Проверка формата id владельца")
                 finishPmValidation("Успешное завершение процедуры валидации")
             }
+            chain {
+                title = "Логика сохранения"
+                repoRead("Чтение модели продукта из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareUpdate("Подготовка модели продукта для обновления")
+                repoUpdate("Обновление модели продукта в БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Удалить объявление", InnerPmCommand.DELETE) {
             stubs("Обработка стабов") {
@@ -113,6 +149,14 @@ class PmProcessor(
                 validateLockProperFormat("Проверка формата lock")
                 finishPmValidation("Успешное завершение процедуры валидации")
             }
+            chain {
+                title = "Логика удаления"
+                repoRead("Чтение модели продукта из БД")
+                checkLock("Проверяем консистентность по оптимистичной блокировке")
+                repoPrepareDelete("Подготовка объекта для удаления")
+                repoDelete("Удаление модели продукта из БД")
+            }
+            prepareResult("Подготовка ответа")
         }
         operation("Поиск объявлений", InnerPmCommand.SEARCH) {
             stubs("Обработка стабов") {
@@ -127,6 +171,8 @@ class PmProcessor(
                 validateSearchDescriptionLength("Валидация длины описания в фильтре")
                 finishPmFilterValidation("Успешное завершение процедуры валидации")
             }
+            repoSearch("Поиск модели продукта в БД по фильтру")
+            prepareResult("Подготовка ответа")
         }
     }.build()
 }
