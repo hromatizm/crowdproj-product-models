@@ -30,13 +30,46 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
+  cassandra:
+    image: cassandra:5.0.7
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: "local-cluster"
+    healthcheck:
+      # Cassandra стартует долго — нужен большой start_period
+      test: [ "CMD-SHELL", "cqlsh -e 'describe keyspaces' || exit 1" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  liquibase:
+    image: liquibase/liquibase:4.29
+    container_name: liquibase
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./liquibase/lib:/liquibase/lib          # ← JAR-файлы расширений
+      - ./liquibase/changelog:/liquibase/changelog
+    command: >
+      --url="jdbc:cassandra://cassandra:9042?localdatacenter=datacenter1&DefaultKeyspace=myapp_keyspace"
+      --username=cassandra
+      --password=cassandra
+      --changeLogFile=changelog/master.yaml
+      --driver=com.ing.data.cassandra.jdbc.CassandraDriver
+      update
+
   app-kafka:
     build:
       context: ../
-      dockerfile: app-kafka/Dockerfile
+      dockerfile: docker/Dockerfile-app-kafka
     container_name: app-kafka
     depends_on:
       - kafka
+      - liquibase
     environment:
       KAFKA_HOSTS: kafka:29092
       KAFKA_GROUP_ID: pm-group
