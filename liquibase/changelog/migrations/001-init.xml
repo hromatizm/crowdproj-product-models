@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="1-create-table-product-model" author="dima mikhalishchin">
+        <sql>
+            CREATE TABLE IF NOT EXISTS product_model_ks.product_models (
+            id UUID,
+            name TEXT,
+            description TEXT,
+            product_group_id TEXT,
+            owner_id TEXT,
+            deleted BOOLEAN,
+            lock TEXT,
+            PRIMARY KEY (id)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
