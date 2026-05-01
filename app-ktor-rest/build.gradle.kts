@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":repo-common"))
     implementation(project(":repo-inmemory"))
     implementation(project(":repo-stub"))
+    implementation(project(":repo-cassandra"))
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.ktor.server.test.host)

@@ -105,9 +105,9 @@ private fun PmCreateObject.toInternal() =
 
 private fun PmUpdateObject.toInternal() =
     InnerPm(
-        id = this.pmId.toInnerPmId(),
+        id = this.id.toInnerPmId(),
         name = this.name ?: "",
         description = this.description ?: "",
         productGroupId = this.productGroupId.toInnerPmProductGroupId(),
-        lock = this.pmLock.toInnerPmLock(),
+        lock = this.lock.toInnerPmLock(),
     )

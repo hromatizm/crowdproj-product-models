@@ -215,9 +215,9 @@ components:
         - $ref: '#/components/schemas/BasePm'
         - type: object
           properties:
-            pmId:
+            id:
               $ref: '#/components/schemas/PmId'
-            pmLock:
+            lock:
               $ref: '#/components/schemas/PmLock'
 
     # Delete

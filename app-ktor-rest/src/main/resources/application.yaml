@@ -8,9 +8,9 @@ ktor:
 product-model:
   repository:
     test: "inmemory"
-    prod: "$DB_TYPE_PROD:inmemory"
+    prod: "$DB_TYPE_PROD:cassandra"
     cassandra:
-      keyspace: "$PM_KEYSPACE:product-model"
+      keyspace: "$PM_KEYSPACE:product_model_ks"
       host: "$PM_HOST:localhost"
       port: "$PM_PORT:9042"
       user: "$PM_USER:cassandra"

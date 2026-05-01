@@ -1,12 +1,15 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(libs.db.cache4k)
     implementation(libs.coroutines.core)
+    implementation(libs.coroutines.jdk9)
     implementation(libs.uuid)
+    implementation(libs.bundles.cassandra)
+    kapt(libs.db.cassandra.kapt)
 
     implementation(project(":common"))
     implementation(project(":repo-common"))
