@@ -6,7 +6,7 @@ import com.product.model.InnerPmContext
 import com.product.model.helper.fail
 import com.product.model.inner.InnerPmState
 
-fun ICorChainDsl<InnerPmContext>.repoSearch(title: String) = worker {
+fun ICorChainDsl<InnerPmContext>. repoSearch(title: String) = worker {
     this.title = title
     description = "Поиск моделей продуктов в БД по фильтру"
     on { state == InnerPmState.RUNNING }

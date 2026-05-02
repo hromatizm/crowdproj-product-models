@@ -12,12 +12,10 @@ fun initCorSettings(env: Map<String, Any?>) = CorSettings(
 
 private fun getDatabaseConf(type: PmDbType, env: Map<String, Any?>): IRepoPm {
     val dbSettingPath = "${ConfigPaths.REPOSITORY}.${type.confName}"
-    val host = env["host"] as? String
-
     val dbSetting = env.getByPath(dbSettingPath) as? String
     return when (dbSetting?.lowercase()) {
         "in-memory", "inmemory", "memory", "mem" -> initInMemory(env)
-        // "cassandra", "nosql", "cass" -> initCassandra()
+        "cassandra", "nosql", "cass" -> initCassandra(env)
         else -> throw IllegalArgumentException(
             "$dbSettingPath has value of '$dbSetting', " +
                     "but it must be set in application.yml to one of: 'inmemory', 'cassandra'"
@@ -33,17 +31,17 @@ fun initInMemory(env: Map<String, Any?>): IRepoPm {
 }
 
 
-//private fun Application.initCassandra(): IRepoPm {
-//    val config = CassandraConfig(environment.config)
-//    return RepoAdCassandra(
-//        keyspaceName = config.keyspace,
-//        host = config.host,
-//        port = config.port,
-//        user = config.user,
-//        pass = config.pass,
-//    )
-//}
-
+private fun initCassandra(env: Map<String, Any?>): IRepoPm {
+    val configPath = "${ConfigPaths.REPOSITORY}.${"cassandra"}"
+    val config = env.getByPath(configPath) as Map<String, String>
+    return RepoPmCassandra(
+        keyspaceName = config["keyspace"] ?: "product_model_ks",
+        host = config["host"] ?: "localhost",
+        port = config["port"]?.toInt() ?: 9042,
+        user = config["user"] ?: "cassandra",
+        pass = config["pass"] ?: "cassandra",
+    )
+}
 
 enum class PmDbType(val confName: String) {
     PROD("prod"),

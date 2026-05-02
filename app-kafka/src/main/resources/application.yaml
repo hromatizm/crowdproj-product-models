@@ -1,9 +1,9 @@
 product-model:
   repository:
     test: "inmemory"
-    prod: "inmemory"
+    prod: "cassandra"
     cassandra:
-      keyspace: "product-model"
+      keyspace: "product_model_ks"
       host: "localhost"
       port: "9042"
       user: "cassandra"

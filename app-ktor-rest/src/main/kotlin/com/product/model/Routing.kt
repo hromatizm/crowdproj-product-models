@@ -26,7 +26,7 @@ fun Application.configureRouting(appSettings: AppSettings) {
                 call.deletePm(appSettings)
             }
             post("/search") {
-                call.createPm(appSettings)
+                call.searchPm(appSettings)
             }
         }
     }

@@ -9,23 +9,8 @@ import com.product.model.InnerPmContext
 import com.product.model.general.initStatus
 import com.product.model.general.operation
 import com.product.model.general.stubs
-import com.product.model.inner.InnerPmCommand
-import com.product.model.inner.InnerPmId
-import com.product.model.inner.InnerPmLock
-import com.product.model.inner.InnerPmState
-import com.product.model.inner.InnerPmUserId
-import com.product.model.inner.InnerPmWorkMode
-import com.product.model.repo.checkLock
-import com.product.model.repo.initRepo
-import com.product.model.repo.prepareResult
-import com.product.model.repo.repoCreate
-import com.product.model.repo.repoDelete
-import com.product.model.repo.repoPrepareCreate
-import com.product.model.repo.repoPrepareDelete
-import com.product.model.repo.repoPrepareUpdate
-import com.product.model.repo.repoRead
-import com.product.model.repo.repoSearch
-import com.product.model.repo.repoUpdate
+import com.product.model.inner.*
+import com.product.model.repo.*
 import com.product.model.stubs.*
 import com.product.model.validation.*
 

@@ -20,8 +20,9 @@ dependencies {
     implementation(project(":log"))
     implementation(project(":logic"))
     implementation(project(":repo-common"))
-    implementation(project(":repo-inmemory"))
     implementation(project(":repo-stub"))
+    implementation(project(":repo-inmemory"))
+    implementation(project(":repo-cassandra"))
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.kotest.testcontainers)

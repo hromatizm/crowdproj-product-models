@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="1-create-table-product-model" author="dima mikhalishchin">
+    <changeSet id="1-create-table-product-models" author="dima mikhalishchin">
         <sql>
             CREATE TABLE IF NOT EXISTS product_model_ks.product_models (
             id UUID,
@@ -17,6 +17,30 @@
             lock TEXT,
             PRIMARY KEY (id)
             );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2-create-index-product-models-name" author="dima mikhalishchin">
+        <preConditions>
+            <tableExists tableName="product_models" />
+        </preConditions>
+        <sql>
+            CREATE CUSTOM INDEX IF NOT EXISTS product_models_name_idx
+            ON product_model_ks.product_models (name)
+            USING 'StorageAttachedIndex'
+            WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+        </sql>
+    </changeSet>
+
+    <changeSet id="3-create-index-product-models-description" author="dima mikhalishchin">
+        <preConditions>
+            <tableExists tableName="product_models" />
+        </preConditions>
+        <sql>
+            CREATE CUSTOM INDEX IF NOT EXISTS product_models_description_idx
+            ON product_model_ks.product_models (description)
+            USING 'StorageAttachedIndex'
+            WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
         </sql>
     </changeSet>
 
