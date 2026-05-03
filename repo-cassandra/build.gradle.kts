@@ -13,10 +13,12 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":repo-common"))
-    implementation(project(":repo-test"))
 
+    testImplementation(project(":repo-test"))
     testImplementation(libs.kotest.junit5)
     testImplementation(kotlin("test"))
+    testImplementation(libs.testcontainers.cassandra)
+    testImplementation(libs.logback.classic)
 
 }
 

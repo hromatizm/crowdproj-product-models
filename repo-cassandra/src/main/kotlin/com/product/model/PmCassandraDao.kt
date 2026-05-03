@@ -15,7 +15,7 @@ interface PmCassandraDao {
 
     @Select
     @StatementAttributes(consistencyLevel = "LOCAL_QUORUM")
-    fun read(id: UUID): CompletionStage<PmCassandraDTO?>
+    fun read(id: String): CompletionStage<PmCassandraDTO?>
 
     @Update(customIfClause = "${COLUMN_LOCK} = :prevLock")
     @StatementAttributes(consistencyLevel = "QUORUM")
@@ -23,7 +23,7 @@ interface PmCassandraDao {
 
     @Delete(customWhereClause = "id = :id", customIfClause = "${COLUMN_LOCK} = :prevLock", entityClass = [PmCassandraDTO::class])
     @StatementAttributes(consistencyLevel = "QUORUM")
-    fun delete(id: UUID, prevLock: String): CompletionStage<AsyncResultSet>
+    fun delete(id: String, prevLock: String): CompletionStage<AsyncResultSet>
 
     @Query("TRUNCATE ${PmCassandraDTO.TABLE_NAME}")
     @StatementAttributes(consistencyLevel = "QUORUM")

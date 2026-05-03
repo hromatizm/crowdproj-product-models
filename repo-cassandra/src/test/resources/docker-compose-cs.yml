@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  cassandra:
+    image: cassandra:5.0.7
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: "local-cluster"
+      CASSANDRA_DC: "datacenter1"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -u cassandra -p cassandra -e 'SELECT key FROM system.local'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    volumes:
+      - ./cassandra.yaml:/opt/cassandra/conf/cassandra.yaml
+
+  cassandra-init:
+    image: cassandra:5.0.3
+    entrypoint: [ "/init.sh" ]
+    command: >
+      cqlsh cassandra -e "
+      CREATE KEYSPACE IF NOT EXISTS product_model_ks
+      WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 1 };"
+    volumes:
+      - ./cassandra-init-data.sh:/init.sh
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+  liquibase:
+    image: liquibase/liquibase:4.29
+    volumes:
+      - ../../../../liquibase/lib:/liquibase/lib
+      - ../../../../liquibase/changelog:/liquibase/changelog
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:cassandra://cassandra:9042/product_model_ks?localdatacenter=datacenter1&compliancemode=Liquibase
+      LIQUIBASE_COMMAND_USERNAME: cassandra
+      LIQUIBASE_COMMAND_PASSWORD: cassandra
+      LIQUIBASE_LIQUIBASE_SCHEMA_NAME: product_model_ks
+    command:
+      - "--url=jdbc:cassandra://cassandra:9042/product_model_ks?localdatacenter=datacenter1&compliancemode=Liquibase"
+      - "--changeLogFile=changelog/master.xml"
+      - "--driver=com.ing.data.cassandra.jdbc.CassandraDriver"
+      - "update"
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully

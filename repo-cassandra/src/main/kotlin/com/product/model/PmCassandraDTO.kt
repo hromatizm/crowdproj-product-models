@@ -10,7 +10,7 @@ import java.util.*
 data class PmCassandraDTO(
     @field:CqlName(COLUMN_ID)
     @field:PartitionKey // можно задать порядок
-    var id: UUID? = null,
+    var id: String? = null,
 
     @field:CqlName(COLUMN_NAME)
     var name: String? = null,
@@ -28,7 +28,7 @@ data class PmCassandraDTO(
     var lock: String?,
 ) {
     constructor(pmModel: InnerPm) : this(
-        id = pmModel.id.takeIf { it != InnerPmId.NONE }?.asString()?.let { UUID.fromString(it) },
+        id = pmModel.id.takeIf { it != InnerPmId.NONE }?.asString(),
         name = pmModel.name.takeIf { it.isNotBlank() },
         description = pmModel.description.takeIf { it.isNotBlank() },
         productGroupId = pmModel.productGroupId.takeIf { it != InnerPmProductGroupId.NONE }?.asString(),
@@ -38,7 +38,7 @@ data class PmCassandraDTO(
 
     fun toPmModel() =
         InnerPm(
-            id = id?.let { InnerPmId(it.toString()) } ?: InnerPmId.NONE,
+            id = id?.let { InnerPmId(it) } ?: InnerPmId.NONE,
             name = name ?: "",
             description = description ?: "",
             productGroupId = productGroupId?.let { InnerPmProductGroupId(it) } ?: InnerPmProductGroupId.NONE,

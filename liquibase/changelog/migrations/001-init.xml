@@ -8,7 +8,7 @@
     <changeSet id="1-create-table-product-models" author="dima mikhalishchin">
         <sql>
             CREATE TABLE IF NOT EXISTS product_model_ks.product_models (
-            id UUID,
+            id TEXT,
             name TEXT,
             description TEXT,
             product_group_id TEXT,

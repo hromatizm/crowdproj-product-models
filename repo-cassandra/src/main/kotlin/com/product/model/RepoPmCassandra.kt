@@ -58,7 +58,7 @@ class RepoPmCassandra(
 
     override suspend fun readPm(rq: DbPmIdRequest): IDbPmResponse = tryPmMethod {
         if (rq.id == InnerPmId.NONE) return@tryPmMethod errorEmptyId
-        val res = dao.read(rq.id.asString().let { UUID.fromString(it) }).await()
+        val res = dao.read(rq.id.asString()).await()
             ?: return@tryPmMethod errorNotFound(rq.id)
         DbPmResponseOk(res.toPmModel())
     }
@@ -81,7 +81,7 @@ class RepoPmCassandra(
             // res.wasApplied() -> DbPmResponse.success(dao.read(idStr).await()?.toAdModel())
             resultField == null -> errorNotFound(rq.pm.id)
             else -> errorRepoConcurrency(
-                oldPm = dao.read(UUID.fromString(idStr)).await()?.toPmModel()
+                oldPm = dao.read(idStr).await()?.toPmModel()
                     ?: throw Exception(
                         "Consistency DB problem: Object with ID $idStr and requested lock $prevLock " +
                                 "was denied for update but the same object was not found in db at further request"
@@ -92,10 +92,10 @@ class RepoPmCassandra(
     }
 
     override suspend fun deletePm(rq: DbPmIdRequest): IDbPmResponse = tryPmMethod {
-        val idUuid = rq.id.asString().let { UUID.fromString(it) }
+        val idStr = rq.id.asString()
         val prevLock = rq.lock.asString()
-        val oldAd = dao.read(idUuid).await()?.toPmModel() ?: return@tryPmMethod errorNotFound(rq.id)
-        val res = dao.delete(idUuid, prevLock).await()
+        val oldAd = dao.read(idStr).await()?.toPmModel() ?: return@tryPmMethod errorNotFound(rq.id)
+        val res = dao.delete(idStr, prevLock).await()
         val isSuccess = res.wasApplied()
         val resultField = res.one()
             ?.takeIf { it.columnDefinitions.contains(PmCassandraDTO.COLUMN_LOCK) }
@@ -106,8 +106,8 @@ class RepoPmCassandra(
             isSuccess -> DbPmResponseOk(oldAd)
             resultField == null -> errorNotFound(rq.id)
             else -> errorRepoConcurrency(
-                dao.read(idUuid).await()?.toPmModel() ?: throw Exception(
-                    "Consistency DB problem: Object with ID $idUuid and requested lock $prevLock " +
+                dao.read(idStr).await()?.toPmModel() ?: throw Exception(
+                    "Consistency DB problem: Object with ID $idStr and requested lock $prevLock " +
                             "was successfully read but was denied for delete"
                 ),
                 rq.lock
