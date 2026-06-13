@@ -179,7 +179,10 @@ components:
     PmCreateObject:
       allOf:
         - $ref: '#/components/schemas/BasePm'
-
+        - type: object
+          properties:
+            ownerId:
+              $ref: '#/components/schemas/PmUserId'
     # Read
     PmReadRequest:
       allOf:
@@ -212,9 +215,9 @@ components:
         - $ref: '#/components/schemas/BasePm'
         - type: object
           properties:
-            pmId:
+            id:
               $ref: '#/components/schemas/PmId'
-            pmLock:
+            lock:
               $ref: '#/components/schemas/PmLock'
 
     # Delete

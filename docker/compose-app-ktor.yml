@@ -1,0 +1,57 @@
+services:
+  cassandra:
+    image: cassandra:5.0.7
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: "local-cluster"
+      CASSANDRA_DC: "datacenter1"
+      CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+    healthcheck:
+      # Cassandra стартует долго — нужен большой start_period
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  cassandra-init:
+    image: cassandra:5.0.7
+    command: >
+      cqlsh cassandra -e "
+      CREATE KEYSPACE IF NOT EXISTS product_model_ks
+      WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 1 };"
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+  liquibase:
+    image: liquibase/liquibase:4.29
+    container_name: liquibase
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully
+    volumes:
+      - ../liquibase/lib:/liquibase/lib
+      - ../liquibase/changelog:/liquibase/changelog
+    command:
+      - "--url=jdbc:cassandra://cassandra:9042/product_model_ks?localdatacenter=datacenter1&compliancemode=Liquibase"
+      - "--changeLogFile=changelog/master.xml"
+      - "--driver=com.ing.data.cassandra.jdbc.CassandraDriver"
+      - "update"
+
+  ktor-rest:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-app-ktor
+    container_name: app-ktor-rest
+    ports:
+      - "8081:8081"
+    depends_on:
+      liquibase:
+        condition: service_completed_successfully
+    environment:
+      CASSANDRA_CONTACT_POINT: cassandra
+      CASSANDRA_PORT: 9042
+      CASSANDRA_KEYSPACE: product_model_ks

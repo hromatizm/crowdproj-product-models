@@ -1,11 +1,6 @@
 package com.product.model
 
-import com.product.model.api.v1.models.PmCreateObject
-import com.product.model.api.v1.models.PmCreateRequest
-import com.product.model.api.v1.models.PmCreateResponse
-import com.product.model.api.v1.models.PmDebug
-import com.product.model.api.v1.models.PmRequestDebugMode
-import com.product.model.api.v1.models.PmRequestDebugStubs
+import com.product.model.api.v1.models.*
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -23,7 +18,7 @@ class KafkaControllerTest : FunSpec({
     test("runKafka") {
         val consumer = MockConsumer<String, String>(OffsetResetStrategy.EARLIEST)
         val producer = MockProducer<String, String>(true, StringSerializer(), StringSerializer())
-        val config = AppKafkaConfig()
+        val config = AppKafkaConfig(env = loadConfigAsMap())
         val inputTopic = config.kafkaTopicInV1
         val outputTopic = config.kafkaTopicOutV1
 

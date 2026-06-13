@@ -23,12 +23,17 @@ dependencies {
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.logback.classic)
+    implementation(libs.uuid)
 
     implementation(project(":common"))
     implementation(project(":api-v1"))
     implementation(project(":api-v1-mappers"))
     implementation(project(":log"))
     implementation(project(":logic"))
+    implementation(project(":repo-common"))
+    implementation(project(":repo-inmemory"))
+    implementation(project(":repo-stub"))
+    implementation(project(":repo-cassandra"))
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.ktor.server.test.host)

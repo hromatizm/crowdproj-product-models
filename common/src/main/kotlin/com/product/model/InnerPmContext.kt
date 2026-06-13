@@ -1,6 +1,7 @@
 package com.product.model
 
 import com.product.model.inner.*
+import com.product.model.repo.IRepoPm
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
@@ -24,6 +25,12 @@ data class InnerPmContext(
     var timeStart: Instant = Instant.NONE,
     var pmRequest: InnerPm = InnerPm(),
     var pmFilterRequest: InnerPmFilter = InnerPmFilter(),
+
+    var pmRepo: IRepoPm = IRepoPm.NONE,
+    var pmRepoRead: InnerPm = InnerPm(), // То, что прочитали из репозитория
+    var pmRepoPrepare: InnerPm = InnerPm(), // То, что готовим для сохранения в БД
+    var pmRepoDone: InnerPm = InnerPm(),  // Результат, полученный из БД
+    var pmsRepoDone: MutableList<InnerPm> = mutableListOf(),
 
     var pmResponse: InnerPm = InnerPm(),
     var pmsResponse: MutableList<InnerPm> = mutableListOf(),

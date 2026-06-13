@@ -22,11 +22,11 @@ fun InnerPm.toTransportReadPm() =
 
 fun InnerPm.toTransportUpdatePm() =
     PmUpdateObject(
-        pmId = id.toTransportPm(),
+        id = id.toTransportPm(),
         name = name,
         description = description,
         productGroupId = productGroupId.toTransportPm(),
-        pmLock = lock.toTransportPm(),
+        lock = lock.toTransportPm(),
     )
 
 fun InnerPm.toTransportDeletePm() =

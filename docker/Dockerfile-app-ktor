@@ -1,6 +1,6 @@
 FROM gradle:8-jdk21-alpine AS build
 WORKDIR /app
-COPY .. .
+COPY . .
 
 RUN gradle :app-ktor-rest:buildFatJar --no-daemon
 

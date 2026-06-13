@@ -7,6 +7,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -18,7 +19,9 @@ class EndpointsTest : FunSpec({
 
     test(("GET / returns 200 OK")) {
         testApplication {
-            application { module() }
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
             client.get("/").apply {
                 assertEquals(HttpStatusCode.OK, status)
             }
@@ -27,8 +30,9 @@ class EndpointsTest : FunSpec({
 
     test("POST /v1/pm/create stub success returns expected product model") {
         testApplication {
-            application { module() }
-
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
             val httpClient = createClient {
                 install(ContentNegotiation) { json() }
             }

@@ -12,12 +12,17 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.kotlinx.atomicfu)
     implementation(libs.logback.classic)
+    implementation("org.snakeyaml:snakeyaml-engine:2.7")
 
     implementation(project(":common"))
     implementation(project(":api-v1"))
     implementation(project(":api-v1-mappers"))
     implementation(project(":log"))
     implementation(project(":logic"))
+    implementation(project(":repo-common"))
+    implementation(project(":repo-stub"))
+    implementation(project(":repo-inmemory"))
+    implementation(project(":repo-cassandra"))
 
     testImplementation(libs.kotest.junit5)
     testImplementation(libs.kotest.testcontainers)
