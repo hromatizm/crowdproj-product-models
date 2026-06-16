@@ -7,40 +7,55 @@
 
     <changeSet id="1-create-table-product-models" author="dima mikhalishchin">
         <sql>
-            CREATE TABLE IF NOT EXISTS product_model_ks.product_models (
-            id TEXT,
-            name TEXT,
-            description TEXT,
-            product_group_id TEXT,
-            owner_id TEXT,
-            deleted BOOLEAN,
-            lock TEXT,
-            PRIMARY KEY (id)
-            );
+            CREATE TABLE IF NOT EXISTS product_model_ks.product_models
+            (
+                id
+                TEXT,
+                name
+                TEXT,
+                description
+                TEXT,
+                product_group_id
+                TEXT,
+                owner_id
+                TEXT,
+                deleted
+                BOOLEAN,
+                lock
+                TEXT,
+                PRIMARY
+                KEY
+            (
+                id
+            )
+                );
         </sql>
     </changeSet>
 
-    <changeSet id="2-create-index-product-models-name" author="dima mikhalishchin">
+    <changeSet id="2-create-index-product-models-name"
+               author="dima mikhalishchin">
         <preConditions>
-            <tableExists tableName="product_models" />
+            <tableExists tableName="product_models"/>
         </preConditions>
         <sql>
-            CREATE CUSTOM INDEX IF NOT EXISTS product_models_name_idx
+            CREATE
+            CUSTOM INDEX IF NOT EXISTS ix_product_models_name
             ON product_model_ks.product_models (name)
-            USING 'StorageAttachedIndex'
-            WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+            USING 'org.apache.cassandra.index.sasi.SASIIndex'
         </sql>
     </changeSet>
 
-    <changeSet id="3-create-index-product-models-description" author="dima mikhalishchin">
+    <changeSet id="3-create-index-product-models-description"
+               author="dima mikhalishchin">
         <preConditions>
-            <tableExists tableName="product_models" />
+            <tableExists tableName="product_models"/>
         </preConditions>
         <sql>
-            CREATE CUSTOM INDEX IF NOT EXISTS product_models_description_idx
+            CREATE
+            CUSTOM INDEX IF NOT EXISTS ix_product_models_description
             ON product_model_ks.product_models (description)
-            USING 'StorageAttachedIndex'
-            WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
+            USING 'org.apache.cassandra.index.sasi.SASIIndex'
+            WITH OPTIONS = {'mode': 'PREFIX'};
         </sql>
     </changeSet>
 

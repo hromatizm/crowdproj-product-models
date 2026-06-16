@@ -39,13 +39,15 @@ services:
       CASSANDRA_CLUSTER_NAME: "local-cluster"
       CASSANDRA_DC: "datacenter1"
       CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+    command: >
+      sh -c "sed -i '/enable_sasi_indexes/d' /etc/cassandra/cassandra.yaml && echo 'sasi_indexes_enabled: true' >> /etc/cassandra/cassandra.yaml && docker-entrypoint.sh cassandra -f"
+    # Cassandra стартует долго — нужен большой start_period
     healthcheck:
-      # Cassandra стартует долго — нужен большой start_period
-      test: [ "CMD-SHELL", "cqlsh -e 'describe keyspaces' || exit 1" ]
+      test: [ "CMD-SHELL", "cqlsh -e 'SELECT now() FROM system.local' 2>/dev/null || exit 1" ]
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 90s
+      start_period: 120s
 
   cassandra-init:
     image: cassandra:5.0.7
@@ -73,9 +75,10 @@ services:
       - "update"
 
   app-kafka:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile-app-kafka
+#    build:
+#      context: ../
+#      dockerfile: docker/Dockerfile-app-kafka
+    image: app-kafka:latest
     container_name: app-kafka
     depends_on:
       - kafka
@@ -85,6 +88,10 @@ services:
       KAFKA_GROUP_ID: pm-group
       KAFKA_TOPIC_IN_V1: pm-v1-in
       KAFKA_TOPIC_OUT_V1: pm-v1-out
+      CASSANDRA_HOST: cassandra
+      CASSANDRA_PORT: 9042
+      CASSANDRA_USER: cassandra
+      CASSANDRA_PASS: cassandra
 
 volumes:
   kafka_data:

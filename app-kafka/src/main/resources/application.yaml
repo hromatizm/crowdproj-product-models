@@ -4,7 +4,7 @@ product-model:
     prod: "cassandra"
     cassandra:
       keyspace: "product_model_ks"
-      host: "localhost"
+      host: "cassandra"
       port: "9042"
       user: "cassandra"
       pass: "cassandra"

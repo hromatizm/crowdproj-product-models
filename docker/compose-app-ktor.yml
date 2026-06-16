@@ -8,13 +8,15 @@ services:
       CASSANDRA_CLUSTER_NAME: "local-cluster"
       CASSANDRA_DC: "datacenter1"
       CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+    command: >
+      sh -c "sed -i '/enable_sasi_indexes/d' /etc/cassandra/cassandra.yaml && echo 'sasi_indexes_enabled: true' >> /etc/cassandra/cassandra.yaml && docker-entrypoint.sh cassandra -f"
+    # Cassandra стартует долго — нужен большой start_period
     healthcheck:
-      # Cassandra стартует долго — нужен большой start_period
-      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces' || exit 1"]
+      test: [ "CMD-SHELL", "cqlsh -e 'SELECT now() FROM system.local' 2>/dev/null || exit 1" ]
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 90s
+      start_period: 120s
 
   cassandra-init:
     image: cassandra:5.0.7
@@ -42,9 +44,10 @@ services:
       - "update"
 
   ktor-rest:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile-app-ktor
+#    build:
+#      context: ../
+#      dockerfile: docker/Dockerfile-app-ktor
+    image: app-ktor-rest:latest
     container_name: app-ktor-rest
     ports:
       - "8081:8081"
@@ -55,3 +58,5 @@ services:
       CASSANDRA_CONTACT_POINT: cassandra
       CASSANDRA_PORT: 9042
       CASSANDRA_KEYSPACE: product_model_ks
+      PM_HOST: cassandra
+      PM_PORT: 9042
